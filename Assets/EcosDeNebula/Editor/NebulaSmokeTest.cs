@@ -9,7 +9,7 @@ namespace EcosDeNebula.Editor
     // Real Play Mode integration run, including procedural world creation, input-state
     // gating, pause, failed attempts, assistance, all nine seals and save/resume.
     [InitializeOnLoad]
-    public static class NebulaSmokeTest
+    public static partial class NebulaSmokeTest
     {
         const string Flag="Nebula.Smoke.Active";
         const string Key="EcosDeNebula.Journey.v1";
@@ -32,6 +32,8 @@ namespace EcosDeNebula.Editor
             NebulaEditor.Configure();NebulaEditor.OpenAdventure();
             SessionState.SetBool("Nebula.Smoke.HadSave",PlayerPrefs.HasKey(Key));
             SessionState.SetString("Nebula.Smoke.Backup",PlayerPrefs.GetString(Key,""));
+            SessionState.SetBool("Nebula.Smoke.HadProgress",PlayerPrefs.HasKey("EcosDeNebula.Progress.v1"));
+            SessionState.SetString("Nebula.Smoke.ProgressBackup",PlayerPrefs.GetString("EcosDeNebula.Progress.v1",""));
             SessionState.SetBool(Flag,true);
             Register();
             EditorApplication.isPlaying=true;
@@ -113,6 +115,7 @@ namespace EcosDeNebula.Editor
             nextAction=now+0.23;
             try
             {
+                if(SessionState.GetBool("Nebula.Smoke.Expansion",false)){ExpansionTick(now);return;}
                 JourneyPhase phase=Get<JourneyPhase>("phase");
                 if(stage==0)
                 {
@@ -203,7 +206,9 @@ namespace EcosDeNebula.Editor
             bool renderOnly=SessionState.GetBool("Nebula.Smoke.RenderOnly",false);
             bool apiOnce=SessionState.GetBool("Nebula.Smoke.ApiOnce",false);
             string result=error==null?(apiOnce?"PASS: Unity -> local bridge -> validated playable pattern; cancellation/fallback verified; model="+SessionState.GetString("Nebula.Smoke.Provider",""):renderOnly?"PASS: three offscreen 3D world renders (no HUD).":"PASS: Unity Play Mode; "+checks+" integration checks; all nine seals, three 3D worlds, pause, failure, replay, save/resume and endless mode."):"FAIL: "+error;
+            if(error==null&&SessionState.GetBool("Nebula.Smoke.Expansion",false))result="PASS: expansion Play Mode; "+checks+" checks; six encounters, guardians, shield, blessings, daily defeat, checkpoint isolation, progression, collectibles, wardrobe and atlas pause.";
             Directory.CreateDirectory("TestResults");File.WriteAllText(apiOnce?"TestResults/Unity-api-result.txt":renderOnly?"TestResults/Unity-render-result.txt":"TestResults/Unity-smoke-result.txt",result);
+            if(SessionState.GetBool("Nebula.Smoke.Expansion",false))File.WriteAllText("TestResults/Unity-expansion-result.txt",result);
             SessionState.SetInt("Nebula.Smoke.ExitCode",error==null?0:1);
             Debug.Log(result);EditorApplication.isPlaying=false;
         }
@@ -213,8 +218,11 @@ namespace EcosDeNebula.Editor
             if(state!=PlayModeStateChange.EnteredEditMode || !SessionState.GetBool(Flag,false))return;
             if(SessionState.GetBool("Nebula.Smoke.HadSave",false))PlayerPrefs.SetString(Key,SessionState.GetString("Nebula.Smoke.Backup",""));
             else PlayerPrefs.DeleteKey(Key);
+            if(SessionState.GetBool("Nebula.Smoke.HadProgress",false))PlayerPrefs.SetString("EcosDeNebula.Progress.v1",SessionState.GetString("Nebula.Smoke.ProgressBackup",""));
+            else PlayerPrefs.DeleteKey("EcosDeNebula.Progress.v1");
             PlayerPrefs.Save();SessionState.SetBool(Flag,false);SessionState.SetBool("Nebula.Smoke.RenderOnly",false);
             SessionState.SetBool("Nebula.Smoke.ApiOnce",false);
+            SessionState.SetBool("Nebula.Smoke.Expansion",false);
             EditorApplication.update-=Tick;Application.logMessageReceived-=OnLog;
             EditorApplication.Exit(SessionState.GetInt("Nebula.Smoke.ExitCode",1));
         }
