@@ -206,7 +206,7 @@ namespace EcosDeNebula.Editor
             bool renderOnly=SessionState.GetBool("Nebula.Smoke.RenderOnly",false);
             bool apiOnce=SessionState.GetBool("Nebula.Smoke.ApiOnce",false);
             string result=error==null?(apiOnce?"PASS: Unity -> local bridge -> validated playable pattern; cancellation/fallback verified; model="+SessionState.GetString("Nebula.Smoke.Provider",""):renderOnly?"PASS: three offscreen 3D world renders (no HUD).":"PASS: Unity Play Mode; "+checks+" integration checks; all nine seals, three 3D worlds, pause, failure, replay, save/resume and endless mode."):"FAIL: "+error;
-            if(error==null&&SessionState.GetBool("Nebula.Smoke.Expansion",false))result="PASS: expansion Play Mode; "+checks+" checks; six encounters, guardians, shield, blessings, daily defeat, checkpoint isolation, progression, collectibles, wardrobe and atlas pause.";
+            if(error==null&&SessionState.GetBool("Nebula.Smoke.Expansion",false))result="PASS: expansion Play Mode; "+checks+" checks; six encounters, guardians, shield, blessings, daily defeat, checkpoint isolation, progression, collectibles, wardrobe, atlas pause and three spatial races.";
             Directory.CreateDirectory("TestResults");File.WriteAllText(apiOnce?"TestResults/Unity-api-result.txt":renderOnly?"TestResults/Unity-render-result.txt":"TestResults/Unity-smoke-result.txt",result);
             if(SessionState.GetBool("Nebula.Smoke.Expansion",false))File.WriteAllText("TestResults/Unity-expansion-result.txt",result);
             SessionState.SetInt("Nebula.Smoke.ExitCode",error==null?0:1);

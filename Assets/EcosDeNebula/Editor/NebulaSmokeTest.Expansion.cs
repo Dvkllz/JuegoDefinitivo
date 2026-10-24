@@ -76,6 +76,22 @@ namespace EcosDeNebula.Editor
                     var progress=Get<NebulaProgress>("progress");progress.skin=3;world.SetCloak(3);Call("SaveJourney");Call("LoadProgress");
                     Check(Get<NebulaProgress>("progress").skin==3,"Wardrobe persists");
                     Check(Get<NebulaProgress>("progress").dust>0,"Earned currency persists");
+                    for(int biome=0;biome<3;biome++)
+                    {
+                        Call("ReturnHome");Call("StartRace",biome);
+                        Check(Get<NebulaWorld>("world").Biome==biome,"Race selects its own biome");
+                        Call("UpdateRace",1f);Check(Get<StarRace>("race").Elapsed==0,"Countdown does not advance race clock");
+                        Set("raceCountdown",0f);
+                        for(int checkpoint=0;checkpoint<StarRace.Total;checkpoint++)
+                        {
+                            Get<NebulaWorld>("world").Luma.position=Get<Transform>("raceBeacon").position;Call("UpdateRace",0.5f);
+                        }
+                        Check(Get<StarRace>("race").Won,"Twelve spatial checkpoints complete race");
+                        Check(Get<NebulaProgress>("progress").raceMedals[biome]==3,"Race medal persists");
+                        int currency=Get<NebulaProgress>("progress").dust;Call("UpdateRace",1f);
+                        Check(currency==Get<NebulaProgress>("progress").dust,"Race reward cannot duplicate");
+                    }
+                    Call("ReturnHome");Check(Get<NebulaSave>("save").world==1&&Get<NebulaSave>("save").seals==2,"Races preserve campaign checkpoint");
                     Finish(null);
                 }
             }
