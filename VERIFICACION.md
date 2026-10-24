@@ -9,6 +9,7 @@
 - **Regresión de campaña: PASS.** 31 comprobaciones volvieron a completar los nueve sellos, tres mundos, pausa, error, reintento, guardado/reanudación y modo infinito. Log: `TestResults/Unity-v3-campaign.log`.
 - **Revisión interactiva del ejecutable:** se abrió la ventana y se revisaron menú, Atlas, taller, carrera, pausa, presentación de patrón y pantalla de respuesta. Se detectaron y corrigieron textos secundarios pequeños, bloqueo de clics detrás de paneles y claridad del modo local. No se afirma haber completado manualmente todos los recorridos ni medido el rendimiento en otros equipos.
 - **Protección del guardado:** las pruebas del Editor respaldan y restauran tanto `EcosDeNebula.Journey.v1` como `EcosDeNebula.Progress.v1`. Las expediciones y carreras no reemplazan el mundo ni los sellos de campaña.
+- **Compilación y escenas: PASS.** Unity generó el ejecutable Windows y tres renders de guardianes (`Capturas/Guardian-1.png` a `Guardian-3.png`). Son capturas de cámara sin HUD. Se inspeccionaron las tres imágenes y la interfaz del ejecutable por separado.
 - **API:** no se creó ninguna clave ni se hizo ninguna solicitud a OpenAI en esta ampliación. `Server` y `NebulaAIClient.cs` conservan la integración anterior. Los modos nuevos son locales y se identifican como tales. La activación/prueba real pendiente de la edición anterior no se considera resuelta.
 
 Resultados: `TestResults/Unity-expansion-result.txt` y `TestResults/Unity-smoke-result.txt`. Los logs y binarios de pruebas no se incluyen en Git; los scripts sí.

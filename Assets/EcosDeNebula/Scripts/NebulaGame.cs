@@ -455,6 +455,7 @@ namespace EcosDeNebula
         void Label(Rect rect,string value,int size,Color color,TextAnchor alignment=TextAnchor.UpperLeft,bool display=false)
         {
             textStyle.font=display?serif:sans;textStyle.fontSize=Mathf.Max(14,size);textStyle.normal.textColor=color;textStyle.alignment=alignment;
+            rect.height=Mathf.Max(rect.height,textStyle.fontSize+8);
             textStyle.wordWrap=true;textStyle.richText=false;textStyle.fontStyle=FontStyle.Normal;
             GUI.Label(rect,value,textStyle);
         }
