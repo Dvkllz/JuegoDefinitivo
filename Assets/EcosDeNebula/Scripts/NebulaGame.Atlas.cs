@@ -53,11 +53,13 @@ namespace EcosDeNebula
             for(int i=0;i<3;i++)
             {
                 float cx=x+30+i*352;
-                Box(new Rect(cx,y+190,336,209),new Color(0.08f,0.14f,0.19f));
+                Box(new Rect(cx,y+190,336,225),new Color(0.08f,0.14f,0.19f));
                 Box(new Rect(cx,y+190,336,4),NebulaWorld.RuneColors[i==2?3:i]);
                 Label(new Rect(cx+20,y+213,295,62),WorldNames[i],28,paper,TextAnchor.UpperLeft,true);
                 Label(new Rect(cx+20,y+285,295,65),ExpeditionRun.Guardians[i],18,mint);
-                Label(new Rect(cx+20,y+363,295,24),(progress.guardians&(1<<i))!=0?"GUARDIÁN RECONCILIADO":"GUARDIÁN POR DESCUBRIR",11,dim);
+                Label(new Rect(cx+20,y+333,295,24),(progress.guardians&(1<<i))!=0?"GUARDIÁN RECONCILIADO":"GUARDIÁN POR DESCUBRIR",11,dim);
+                string best=progress.raceBest[i]>0?" · "+progress.raceBest[i].ToString("0.0")+" s":"";
+                if(Button(new Rect(cx+20,y+369,295,32),"Carrera 3D"+best,false,phase==JourneyPhase.Home))StartRace(i);
             }
             Label(new Rect(x+34,y+423,1020,64),"La expedición es una aventura independiente: tres corazones, seis pruebas y una bendición entre encuentros. Los errores gastan corazones; tu campaña nunca pierde sellos. Al retirarte conservas las recompensas obtenidas, pero el recorrido empieza de nuevo.",17,paper);
             int today=ExpeditionRun.DailySeed(DateTime.UtcNow);

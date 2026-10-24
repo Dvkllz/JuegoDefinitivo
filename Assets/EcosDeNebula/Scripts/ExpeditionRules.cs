@@ -104,6 +104,8 @@ namespace EcosDeNebula
         public int xp, dust, wins, runs, guardians, achievements, dashes, skin;
         public int vitality, aegis, stride;
         public int dailyDate, dailyBest, dailyRewardDate;
+        public int[] raceMedals = new int[3];
+        public float[] raceBest = new float[3];
         public int Level { get { return 1 + Math.Min(49, xp / 200); } }
         public void Sanitize()
         {
@@ -113,6 +115,13 @@ namespace EcosDeNebula
             vitality = Clamp(vitality, 0, 2); aegis = Clamp(aegis, 0, 2); stride = Clamp(stride, 0, 2);
             skin = Clamp(skin, 0, 3); if (!SkinUnlocked(skin)) skin = 0;
             dailyBest = Clamp(dailyBest, 0, 100000);
+            if(raceMedals==null||raceMedals.Length!=3)raceMedals=new int[3];
+            if(raceBest==null||raceBest.Length!=3)raceBest=new float[3];
+            for(int i=0;i<3;i++)
+            {
+                raceMedals[i]=Clamp(raceMedals[i],0,3);
+                if(float.IsNaN(raceBest[i])||float.IsInfinity(raceBest[i])||raceBest[i]<0||raceBest[i]>StarRace.Limit)raceBest[i]=0;
+            }
         }
         static int Clamp(int n, int a, int b) { return Math.Max(a, Math.Min(b, n)); }
         public int TalentRank(int id) { return id == 0 ? vitality : id == 1 ? aegis : id == 2 ? stride : 2; }

@@ -84,6 +84,7 @@ namespace EcosDeNebula
             if(wasBoss)progress.guardians|=1<<bossWorld;
             CheckAchievements();SaveJourney();world.Celebrate();Play(winSound);
             phase=JourneyPhase.Success;phaseClock=0;
+            if(expedition.Finished)SettleExpedition();
         }
         void AdvanceExpedition()
         {
@@ -106,13 +107,13 @@ namespace EcosDeNebula
         void ReturnHome()
         {
             CancelGeneration();if(expedition!=null)SettleExpedition();
-            SaveJourney();expedition=null;phase=JourneyPhase.Home;paused=false;showHelp=false;endless=false;panel=0;
+            SaveJourney();expedition=null;race=null;phase=JourneyPhase.Home;paused=false;showHelp=false;endless=false;panel=0;
             trial=null;dashTime=0;BuildWorld();
         }
         void UpdateExpansion(float dt)
         {
             dashCooldown=Mathf.Max(0,dashCooldown-dt);dashTime=Mathf.Max(0,dashTime-dt);focusTime=Mathf.Max(0,focusTime-dt);
-            bool canMove=phase==JourneyPhase.Briefing||phase==JourneyPhase.Watching||phase==JourneyPhase.Answering||phase==JourneyPhase.Retry||phase==JourneyPhase.Success;
+            bool canMove=phase==JourneyPhase.Briefing||phase==JourneyPhase.Watching||phase==JourneyPhase.Answering||phase==JourneyPhase.Retry||phase==JourneyPhase.Success||phase==JourneyPhase.Race&&race!=null&&!race.Finished&&raceCountdown<=0;
             if(canMove&&Input.GetKeyDown(KeyCode.Q)&&dashCooldown<=0)
             {
                 dashTime=0.25f;dashCooldown=3.5f-(expedition!=null&&expedition.Daily?0:progress.stride*0.65f);
@@ -127,7 +128,8 @@ namespace EcosDeNebula
                 float distance=(world.Fragments[i].position-world.Luma.position).sqrMagnitude;
                 if(distance<closest){closest=distance;target=world.Fragments[i].position;found=true;}
             }
-            world.PointCompass(target,canMove&&Input.GetKey(KeyCode.C)&&found);
+            if(race!=null)world.PointCompass(RaceTarget(),!race.Finished&&Input.GetKey(KeyCode.C));
+            else world.PointCompass(target,canMove&&Input.GetKey(KeyCode.C)&&found);
         }
         void RevealNextRune()
         {

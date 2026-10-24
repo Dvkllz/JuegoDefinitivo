@@ -44,6 +44,23 @@ static class ExpeditionTests
         Check(p.dailyBest==2100,"Daily best improves on replays");
         p.xp=int.MaxValue;p.dust=-50;p.stride=999;p.skin=99;p.Sanitize();
         Check(p.xp==9999999&&p.dust==0&&p.stride==2&&p.skin==0,"Corrupt save sanitized");
+        for(int biome=0;biome<3;biome++)
+        {
+            var race=new StarRace(biome);
+            for(int i=0;i<StarRace.Total;i++)
+            {
+                Check(race.TargetIndex>=0&&race.TargetIndex<8,"Legal race target");
+                Check(!race.Touch((race.TargetIndex+1)%8),"Wrong beacon rejected");
+                race.Tick(2);Check(race.Touch(race.TargetIndex),"Target reached");
+            }
+            Check(race.Won&&race.Medal==3&&race.Finished,"Gold race completion");
+            Check(!race.Touch(race.TargetIndex),"No rewards after finish");
+        }
+        var expired=new StarRace(0);expired.Tick(float.NaN);expired.Tick(-5);
+        Check(expired.Elapsed==0,"Invalid race time ignored");expired.Tick(66);
+        Check(expired.Finished&&!expired.Won&&!expired.Touch(0),"Timeout blocks later completion");
+        p.raceBest=new[]{float.NaN,-1f,float.PositiveInfinity};p.raceMedals=null;p.Sanitize();
+        Check(p.raceMedals.Length==3&&p.raceBest[0]==0&&p.raceBest[1]==0,"Race save repair");
         Console.WriteLine("PASS: "+checks+" expedition and progression checks");
     }
 }

@@ -19,7 +19,7 @@ namespace EcosDeNebula
         public int fragments;
     }
 
-    public enum JourneyPhase { Home, Briefing, Watching, Answering, Success, Retry, Crossing, Ending, Generating, Blessing }
+    public enum JourneyPhase { Home, Briefing, Watching, Answering, Success, Retry, Crossing, Ending, Generating, Blessing, Race }
 
     public sealed partial class NebulaGame : MonoBehaviour
     {
@@ -118,11 +118,12 @@ namespace EcosDeNebula
         void BuildWorld()
         {
             if (world != null) { world.gameObject.SetActive(false); Destroy(world.gameObject); }
-            int biome=expedition==null?save.world:expedition.Biome;
+            int biome=race!=null?race.Biome:expedition==null?save.world:expedition.Biome;
             GameObject root = new GameObject("Santuario · " + WorldNames[biome]);
             root.transform.SetParent(transform);
             world = root.AddComponent<NebulaWorld>(); world.Build(biome); world.ReducedMotion = reducedMotion;
             if(progress!=null)world.SetCloak(progress.skin);
+            if(ambient!=null)ambient.pitch=biome==0?1:biome==1?0.89f:1.12f;
             walkingToRune = false; selected = -1;
         }
 
@@ -257,7 +258,9 @@ namespace EcosDeNebula
             UpdateExpansion(dt);
             if(phase==JourneyPhase.Generating)return;
             if (phase == JourneyPhase.Home || phase == JourneyPhase.Ending || phase == JourneyPhase.Crossing || phase==JourneyPhase.Blessing) return;
+            if(phase==JourneyPhase.Race&&(raceCountdown>0||race.Finished)){UpdateRace(dt);return;}
             MoveLuma(dt);
+            if(phase==JourneyPhase.Race){UpdateRace(dt);return;}
             if (phase == JourneyPhase.Watching)
             {
                 noteClock += dt;
@@ -328,6 +331,7 @@ namespace EcosDeNebula
                 if (delta.magnitude < 0.15f) walkingToRune = false;
                 else direction = delta.normalized;
             }
+            if(dashTime>0&&direction.sqrMagnitude<0.01f)direction=world.Luma.forward;
             if (direction.sqrMagnitude > 0.01f)
             {
                 Vector3 next = world.Luma.position + direction * (dashTime>0?13f:Input.GetKey(KeyCode.LeftShift) ? 5.2f : 3.5f) * dt;
@@ -507,6 +511,7 @@ namespace EcosDeNebula
 
         void JourneyUI()
         {
+            if(race!=null){RaceUI();return;}
             if(expedition!=null){ExpeditionHUD();return;}
             Box(new Rect(30,112,272,205),ink);
             Label(new Rect(50,131,232,22),endless?"MODO CONSTELACIÓN":"SANTUARIO 0"+(save.world+1)+" / 03",11,mint);

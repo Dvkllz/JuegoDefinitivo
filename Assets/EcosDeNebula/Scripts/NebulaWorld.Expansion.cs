@@ -72,6 +72,15 @@ namespace EcosDeNebula
             Transform cape=Luma.Find("Capa");
             if(cape!=null)cape.GetComponent<Renderer>().sharedMaterial.color=CloakColors[Mathf.Clamp(skin,0,3)];
         }
+        public Transform CreateRaceBeacon()
+        {
+            Transform beacon=new GameObject("Baliza de carrera").transform;beacon.SetParent(transform,false);
+            Material glow=Mat(new Color(1,0.8f,0.28f),2);
+            Ring("Objetivo",Vector3.up*0.08f,0.8f,0.1f,glow,beacon);
+            for(int i=0;i<3;i++)
+                Facet("Flecha de luz",new Vector3(0,1.4f+i*0.45f,0),new[]{-0.15f,0,0.2f},new[]{0,0.22f,0},4,glow,beacon);
+            return beacon;
+        }
         public void SetGuardian(bool visible,float energy=1)
         {
             Guardian.gameObject.SetActive(visible);guardianEnergy=Mathf.Clamp01(energy);
