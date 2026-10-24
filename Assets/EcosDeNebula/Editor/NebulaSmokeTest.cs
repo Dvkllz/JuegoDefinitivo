@@ -56,10 +56,16 @@ namespace EcosDeNebula.Editor
             NebulaEditor.BuildWindows();
             RenderWorlds();
         }
+        public static void BuildAndRenderExpansion()
+        {
+            NebulaEditor.BuildWindows();
+            SessionState.SetBool("Nebula.Smoke.Guardians",true);RenderWorlds();
+        }
 
         static void RenderWorld(int index)
         {
             Get<NebulaSave>("save").world=index;Call("BuildWorld");Call("UpdateCamera",1f,true);
+            if(SessionState.GetBool("Nebula.Smoke.Guardians",false))Get<NebulaWorld>("world").SetGuardian(true);
             Camera camera=Get<Camera>("view");
             RenderTexture target=new RenderTexture(1600,900,24);
             RenderTexture previous=RenderTexture.active;
@@ -70,7 +76,7 @@ namespace EcosDeNebula.Editor
                 Texture2D png=new Texture2D(1600,900,TextureFormat.RGB24,false);
                 png.ReadPixels(new Rect(0,0,1600,900),0,0);png.Apply();
                 Directory.CreateDirectory("Capturas");
-                File.WriteAllBytes("Capturas/Santuario-"+(index+1)+".png",png.EncodeToPNG());
+                File.WriteAllBytes("Capturas/"+(SessionState.GetBool("Nebula.Smoke.Guardians",false)?"Guardian-":"Santuario-")+(index+1)+".png",png.EncodeToPNG());
                 UnityEngine.Object.Destroy(png);
             }
             finally
@@ -223,6 +229,7 @@ namespace EcosDeNebula.Editor
             PlayerPrefs.Save();SessionState.SetBool(Flag,false);SessionState.SetBool("Nebula.Smoke.RenderOnly",false);
             SessionState.SetBool("Nebula.Smoke.ApiOnce",false);
             SessionState.SetBool("Nebula.Smoke.Expansion",false);
+            SessionState.SetBool("Nebula.Smoke.Guardians",false);
             EditorApplication.update-=Tick;Application.logMessageReceived-=OnLog;
             EditorApplication.Exit(SessionState.GetInt("Nebula.Smoke.ExitCode",1));
         }

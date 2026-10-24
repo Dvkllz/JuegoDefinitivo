@@ -10,6 +10,10 @@ namespace EcosDeNebula.Editor
         {
             SessionState.SetBool("Nebula.Smoke.Expansion",true);Run();
         }
+        public static void BuildExpansion()
+        {
+            NebulaEditor.BuildWindows();Expansion();
+        }
         static void ExpansionTick(double now)
         {
             JourneyPhase phase=Get<JourneyPhase>("phase");
