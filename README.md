@@ -1,5 +1,15 @@
 # Ecos de Nébula
 
+## Nueva expansión: La era de los guardianes
+
+Además de la campaña original, ahora puedes jugar expediciones de seis encuentros, enfrentarte a tres guardianes con reglas propias, elegir bendiciones y conseguir XP, esencia, talentos y cuatro capas. El Atlas (TAB) reúne viajes, taller, doce logros y doce memorias de historia.
+
+También hay **tres carreras 3D de luciérnagas**: doce balizas en 65 segundos, medallas de oro/plata/bronce y récords locales. Inícialas desde **Atlas → Viajes → Carrera 3D**. El desafío diario tiene semilla por fecha UTC, sin ventajas de talentos ni clasificación en línea.
+
+Todo este contenido nuevo funciona sin Internet. **La API no se ha activado ni probado de nuevo en esta ampliación**; conserva la integración y el estado de configuración anterior. Las expediciones indican claramente que sus reglas son locales.
+
+Abre `Jugar.cmd` para el modo local o el ejecutable de `Builds/Windows`. Consulta `CHANGELOG.md` para las novedades completas.
+
 Una aventura original **3D para Unity 6**, en español, sobre memoria, patrones y una IA que aprende de tus intentos. La edición generativa conecta con la **API de OpenAI** para crear patrones, nombres, mensajes y pistas. También incluye un modo local sin conexión.
 
 ## Abrir y jugar
@@ -43,6 +53,10 @@ La nueva edición incluye **doce fragmentos de memoria** para encontrar caminand
 | Volver a escuchar | Espacio o botón de ayuda |
 | Continuar en un diálogo | Intro |
 | Pausa | Esc |
+| Atlas / taller / diario | TAB |
+| Impulso | Q (recarga visible en el HUD) |
+| Brújula de memorias o balizas | Mantener C |
+| Revelar la siguiente runa | F (cuenta como ayuda) |
 
 La pausa ofrece sonido y movimiento reducido. Las runas se distinguen por número, nombre, forma, color y sonido. No hay límite de tiempo.
 
@@ -85,5 +99,9 @@ Validación adicional con el Editor instalado:
 ```
 
 Consulta `VERIFICACION.md` para conocer qué se pudo comprobar en el equipo y qué queda pendiente.
+
+Para comprobar toda la lógica offline: `powershell -File Tests/Run-Checks.ps1`. Añade `-Unity` para ejecutar también la campaña completa y las expediciones/carreras en Play Mode; cierra antes el proyecto en el Editor. Las pruebas restauran los guardados previos. No hacen llamadas a OpenAI.
+
+Los talentos, experiencia y aspectos sobreviven a **Nueva aventura**. Esa opción sí reinicia la campaña y sus memorias. Las expediciones y carreras no modifican sus sellos ni su mundo. Las recompensas de cada encuentro se guardan, pero los recorridos en curso no se reanudan al cerrar el juego.
 
 Pruebas del puente y del contrato generativo: `node --test Server/director.test.mjs`. Estas pruebas usan respuestas simuladas y no consumen la API. `node Server/live-check.mjs` sí realiza una solicitud real y guarda únicamente el resultado del reto, sin secretos.

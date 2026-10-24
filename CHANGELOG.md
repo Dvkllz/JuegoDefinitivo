@@ -22,6 +22,8 @@ Esta expansión mantiene la campaña y la integración de OpenAI existentes. Las
 - Ruinas, faroles flotantes y vestuario visible en el personaje.
 - Impulso con Q, brújula de fragmentos manteniendo C y concentración con F.
 - Atlas con TAB: viajes, taller, logros y memorias; pausa la acción mientras está abierto.
+- Tres carreras espaciales de luciérnagas: doce balizas, cuenta atrás, límite de 65 segundos, tres medallas y récord por santuario.
+- El impulso también funciona desde parado en la dirección de Luma; la brújula señala la siguiente baliza durante una carrera.
 
 ### Guardados y pruebas
 
