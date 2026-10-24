@@ -37,7 +37,7 @@ namespace EcosDeNebula
         };
         readonly Color ink = new Color(0.045f, 0.085f, 0.12f, 0.96f);
         readonly Color paper = new Color(0.88f, 0.94f, 0.90f);
-        readonly Color dim = new Color(0.53f, 0.65f, 0.68f);
+        readonly Color dim = new Color(0.68f, 0.78f, 0.81f);
         readonly Color mint = new Color(0.65f, 0.91f, 0.75f);
         readonly Color amber = new Color(1f, 0.71f, 0.39f);
         Camera view;
@@ -310,7 +310,7 @@ namespace EcosDeNebula
             float scale = Mathf.Min(Screen.width / 1600f, Screen.height / 900f);
             Vector2 mouse = new Vector2(Input.mousePosition.x / scale, (Screen.height - Input.mousePosition.y) / scale);
             float w = Screen.width / scale, h = Screen.height / scale;
-            return mouse.y < 100 || mouse.y > h - 270 || (mouse.x < 315 && mouse.y < 520) || (mouse.x > w - 290 && mouse.y < 580);
+            return panel!=0 || mouse.y < 100 || mouse.y > h - 270 || (mouse.x < 315 && mouse.y < 655) || (mouse.x > w - 290 && mouse.y < 580);
         }
 
         void MoveLuma(float dt)
@@ -454,7 +454,7 @@ namespace EcosDeNebula
         }
         void Label(Rect rect,string value,int size,Color color,TextAnchor alignment=TextAnchor.UpperLeft,bool display=false)
         {
-            textStyle.font=display?serif:sans;textStyle.fontSize=size;textStyle.normal.textColor=color;textStyle.alignment=alignment;
+            textStyle.font=display?serif:sans;textStyle.fontSize=Mathf.Max(14,size);textStyle.normal.textColor=color;textStyle.alignment=alignment;
             textStyle.wordWrap=true;textStyle.richText=false;textStyle.fontStyle=FontStyle.Normal;
             GUI.Label(rect,value,textStyle);
         }
@@ -478,7 +478,7 @@ namespace EcosDeNebula
             Label(new Rect(38,22,45,40),"✧",31,mint,TextAnchor.MiddleCenter);
             Label(new Rect(92,22,310,27),"ECOS DE NÉBULA",21,paper);
             Label(new Rect(94,51,350,18),"UNA AVENTURA DE PATRONES · 3D",10,dim);
-            bool canClick=!paused&&!showHelp; bool previous=GUI.enabled;GUI.enabled=canClick;
+            bool canClick=!paused&&!showHelp&&panel==0; bool previous=GUI.enabled;GUI.enabled=previous&&canClick;
             if(Button(new Rect(uiW-365,22,104,40),muted?"Sonido: no":"Sonido: sí")) {muted=!muted;SaveJourney();}
             if(Button(new Rect(uiW-251,22,105,40),"Cómo jugar")) showHelp=true;
             if(Button(new Rect(uiW-136,22,100,40),phase==JourneyPhase.Home?"Acerca de":"Pausa  II")) {if(phase==JourneyPhase.Home)showHelp=true;else paused=true;}
@@ -487,7 +487,7 @@ namespace EcosDeNebula
 
         void HomeUI()
         {
-            bool previous=GUI.enabled;GUI.enabled=!showHelp;
+            bool previous=GUI.enabled;GUI.enabled=previous&&!showHelp&&!paused;
             Box(new Rect(0,86,580,uiH-86),new Color(0.035f,0.075f,0.105f,0.87f));
             Label(new Rect(72,145,450,24),"01 / EL ARCHIPIÉLAGO DE LOS ECOS",12,mint);
             Label(new Rect(66,194,485,185),"El mundo tiene\nun patrón.",66,paper,TextAnchor.UpperLeft,true);
@@ -680,7 +680,8 @@ namespace EcosDeNebula
             }
             else
             {
-                if(Button(new Rect(x+40,y+100,420,35),apiEnabled?"Generación API: activada":"Generación API: desactivada"))
+                bool localActivity=expedition!=null||race!=null;
+                if(Button(new Rect(x+40,y+100,420,35),localActivity?"Actividad local · no consume API":apiEnabled?"Generación API: activada":"Generación API: desactivada",false,!localActivity))
                 {apiEnabled=!apiEnabled;if(!apiEnabled&&phase==JourneyPhase.Generating)UseLocalTrial();}
                 if(Button(new Rect(x+40,y+159,420,55),"Continuar",true))paused=false;
                 if(Button(new Rect(x+40,y+231,420,48),reducedMotion?"Movimiento reducido: sí":"Movimiento reducido: no")) {reducedMotion=!reducedMotion;world.ReducedMotion=reducedMotion;SaveJourney();}
