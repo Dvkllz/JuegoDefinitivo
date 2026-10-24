@@ -1,6 +1,19 @@
 # Verificación de Ecos de Nébula
 
-Fecha: 13 de octubre de 2026. Equipo Windows, Unity 6000.6.5f1.
+Última revisión: 24 de octubre de 2026. Equipo Windows, Unity 6000.6.5f1.
+
+## La era de los guardianes — 24 de octubre
+
+- **Lógica offline: PASS.** 25.944 comprobaciones de patrones y 20.232 de expediciones, progresión y carreras: 46.176 en total. Comando reproducible: `Tests/Run-Checks.ps1`.
+- **Expansión en Unity Play Mode: PASS.** 47 comprobaciones completaron seis encuentros y tres guardianes, escudo, bendiciones, derrota diaria, aislamiento del guardado de campaña, progresión, colección, vestuario, pausa del Atlas y las doce balizas de cada una de las tres carreras. Se comprobó que las recompensas no se duplicaran.
+- **Regresión de campaña: PASS.** 31 comprobaciones volvieron a completar los nueve sellos, tres mundos, pausa, error, reintento, guardado/reanudación y modo infinito. Log: `TestResults/Unity-v3-campaign.log`.
+- **Revisión interactiva del ejecutable:** se abrió la ventana y se revisaron menú, Atlas, taller, carrera, pausa, presentación de patrón y pantalla de respuesta. Se detectaron y corrigieron textos secundarios pequeños, bloqueo de clics detrás de paneles y claridad del modo local. No se afirma haber completado manualmente todos los recorridos ni medido el rendimiento en otros equipos.
+- **Protección del guardado:** las pruebas del Editor respaldan y restauran tanto `EcosDeNebula.Journey.v1` como `EcosDeNebula.Progress.v1`. Las expediciones y carreras no reemplazan el mundo ni los sellos de campaña.
+- **API:** no se creó ninguna clave ni se hizo ninguna solicitud a OpenAI en esta ampliación. `Server` y `NebulaAIClient.cs` conservan la integración anterior. Los modos nuevos son locales y se identifican como tales. La activación/prueba real pendiente de la edición anterior no se considera resuelta.
+
+Resultados: `TestResults/Unity-expansion-result.txt` y `TestResults/Unity-smoke-result.txt`. Los logs y binarios de pruebas no se incluyen en Git; los scripts sí.
+
+## Historial de verificación — 13 de octubre
 
 ## Edición generativa y mejoras
 
@@ -11,7 +24,7 @@ Fecha: 13 de octubre de 2026. Equipo Windows, Unity 6000.6.5f1.
 - **Compilación actual de Windows: PASS.** `Unity-v2-build.log` confirma `NEBULA_BUILD_OK 95454853 bytes`. Los tres santuarios mejorados se renderizaron y revisaron como imágenes de cámara, sin HUD.
 - **Llamada real a OpenAI: pendiente.** La clave inicial fue creada por el conector, pero un archivo temporal de la configuración desapareció antes de guardarla. `.env.local` no se creó. Se solicitó autorización para una clave de reemplazo; no se fabricaron respuestas reales ni se afirmó que la cuenta tuviera saldo o acceso al modelo.
 
-Las comprobaciones históricas de la primera edición se conservan a continuación. La revisión interactiva completa de la ventana continúa pendiente.
+Las comprobaciones históricas de la primera edición se conservan a continuación. Sus límites corresponden a esa fecha; para la revisión interactiva actual, consulta la sección del 24 de octubre.
 
 ## Pruebas realizadas
 
