@@ -17,7 +17,7 @@ namespace EcosDeNebula
         public float Glow;
     }
 
-    public sealed class NebulaWorld : MonoBehaviour
+    public sealed partial class NebulaWorld : MonoBehaviour
     {
         public static readonly Color[] RuneColors = {
             new Color(0.27f, 0.96f, 0.77f), new Color(1f, 0.68f, 0.28f),
@@ -245,6 +245,7 @@ namespace EcosDeNebula
             Facet("Máscara del Tejedor",Vector3.zero,new[]{-0.38f,0f,0.38f},new[]{0f,0.43f,0f},5,gold,Weaver);
             Shape(PrimitiveType.Sphere,"Ojo del Tejedor",new Vector3(0,0,-0.3f),Vector3.one*0.22f,lineMat,Weaver);
             var wRing=Ring("Anillo del Tejedor",Vector3.zero,0.64f,0.035f,gold,Weaver);wRing.localRotation=Quaternion.Euler(60,0,25);
+            BuildExpansion(accent,stone,gold,lineMat);
         }
 
         void Tree(Vector3 p,float size,Material bark,Material leaves,Material gold)
@@ -308,6 +309,7 @@ namespace EcosDeNebula
         public void Animate(float dt)
         {
             clock+=dt;
+            AnimateExpansion(dt);
             celebration=Mathf.Max(0,celebration-dt);
             if(celebration>0 && !ReducedMotion)
             {
