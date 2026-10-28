@@ -1,6 +1,19 @@
 # Verificación de Ecos de Nébula
 
-Última revisión: 24 de octubre de 2026. Equipo Windows, Unity 6000.6.5f1.
+Última revisión: 28 de octubre de 2026. Equipo Windows, Unity 6000.6.5f1.
+
+## Códigos bajo asedio — 28 de octubre
+
+- **Regresión de códigos: PASS.** El caso de cuatro destellos/dos entradas se cubre expresamente: tras dos respuestas el intento sigue incompleto; se completa con las cuatro. El contrato de reproducción iguala siempre destellos y casillas. Los modos repetidos requieren ahora el código entero.
+- **Lógica offline: PASS.** 25.944 comprobaciones de patrones, 22.031 de expediciones/progresión/carreras y 21.219 de combate/dificultad: **69.194** en total. Ejecutar `Tests/Run-Checks.ps1`.
+- **Combate en Unity:** se verificaron cinco dificultades, cantidades de enemigos, pausa, advertencias previas al ataque, invulnerabilidad de esquiva, golpes para matar, creación/intercepción de proyectiles y colisiones continuas. Las pruebas también verifican que un código erróneo termine el recorrido incluso con vida y escudos, y que la muerte reinicie la campaña sin borrar XP ni memorias. Resultado: `TestResults/Unity-combat-result.txt`.
+- **Campaña: PASS.** Las 31 comprobaciones vuelven a completar nueve sellos, tres santuarios y modo infinito, con la nueva derrota y reinicio. Log: `TestResults/Unity-v4-Run.log`.
+- **Expediciones y carreras: PASS.** 47 comprobaciones de seis encuentros, guardianes, escudos contra enemigos, bendiciones, derrota diaria por un solo código, guardado separado y tres carreras. Resultado: `TestResults/Unity-expansion-result.txt`.
+- **Inspección del ejecutable:** se revisaron selector de dificultad, demostración de cinco luces/cinco casillas, aparición de perseguidores y tiradores, HUD y derrota real por daño enemigo. Esta revisión motivó oscurecer las runas no activas, añadir pausas entre destellos y sustituir etiquetas grandes de enemigos por barras de vida compactas. No es una evaluación de rendimiento en otros equipos ni una partida manual completa en cada dificultad.
+- **Guardados:** las pruebas restauran campaña, progresión y dificultad anteriores. El reinicio por derrota forma parte de la mecánica solicitada: en campaña elimina los sellos/puntos del recorrido; en expedición elimina solo el recorrido independiente. Récords, memorias y desbloqueos se conservan.
+- **API:** esta actualización no crea credenciales ni hace solicitudes a OpenAI. La integración existente se conserva y la prueba real pendiente no se considera resuelta.
+
+Las secciones siguientes son históricas. Las reglas de reintento anteriores fueron sustituidas por el reinicio completo descrito arriba.
 
 ## La era de los guardianes — 24 de octubre
 
