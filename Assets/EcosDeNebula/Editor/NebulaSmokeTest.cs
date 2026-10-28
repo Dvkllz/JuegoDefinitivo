@@ -34,6 +34,8 @@ namespace EcosDeNebula.Editor
             SessionState.SetString("Nebula.Smoke.Backup",PlayerPrefs.GetString(Key,""));
             SessionState.SetBool("Nebula.Smoke.HadProgress",PlayerPrefs.HasKey("EcosDeNebula.Progress.v1"));
             SessionState.SetString("Nebula.Smoke.ProgressBackup",PlayerPrefs.GetString("EcosDeNebula.Progress.v1",""));
+            SessionState.SetBool("Nebula.Smoke.HadDifficulty",PlayerPrefs.HasKey("EcosDeNebula.Difficulty.v1"));
+            SessionState.SetInt("Nebula.Smoke.DifficultyBackup",PlayerPrefs.GetInt("EcosDeNebula.Difficulty.v1",1));
             SessionState.SetBool(Flag,true);
             Register();
             EditorApplication.isPlaying=true;
@@ -121,10 +123,12 @@ namespace EcosDeNebula.Editor
             nextAction=now+0.23;
             try
             {
+                if(SessionState.GetBool("Nebula.Smoke.Combat",false)){CombatTick(now);return;}
                 if(SessionState.GetBool("Nebula.Smoke.Expansion",false)){ExpansionTick(now);return;}
                 JourneyPhase phase=Get<JourneyPhase>("phase");
                 if(stage==0)
                 {
+                    Set("difficulty",1);
                     Check(phase==JourneyPhase.Home,"Starts at title");
                     Check(UnityEngine.Object.FindObjectsByType<MeshRenderer>().Length>100,"3D world is populated");
                     Check(Get<NebulaWorld>("world").Runes.Length==4,"Four interactive crystals");
@@ -155,9 +159,9 @@ namespace EcosDeNebula.Editor
                     }
                     int expected=Get<PatternAttempt>("attempt").Expected;
                     Call("Submit",(expected+1)%4);
-                    Check(Get<JourneyPhase>("phase")==JourneyPhase.Retry,"Incorrect response reaches retry");
+                    Check(Get<JourneyPhase>("phase")==JourneyPhase.Defeat,"Incorrect response ends the run");
                     Check(Get<NebulaSave>("save").seals==0,"Error never awards a seal");
-                    Call("Replay");Check(Get<bool>("assisted"),"Replay marks assistance");stage=3;
+                    Call("RestartFailedRun");Call("BeginTrial");stage=6;
                 }
                 else if(stage==3)
                 {
@@ -202,6 +206,8 @@ namespace EcosDeNebula.Editor
                     Check(!Get<PatternTrial>("trial").GeneratedByApi,"Late API responses cannot replace a local pattern");
                     Finish(null);
                 }
+                else if(stage==6&&phase==JourneyPhase.Answering)
+                {Call("Replay");Check(Get<bool>("assisted"),"Replay marks assistance");stage=3;}
             }
             catch(Exception e){Finish(e.ToString());}
         }
@@ -213,8 +219,10 @@ namespace EcosDeNebula.Editor
             bool apiOnce=SessionState.GetBool("Nebula.Smoke.ApiOnce",false);
             string result=error==null?(apiOnce?"PASS: Unity -> local bridge -> validated playable pattern; cancellation/fallback verified; model="+SessionState.GetString("Nebula.Smoke.Provider",""):renderOnly?"PASS: three offscreen 3D world renders (no HUD).":"PASS: Unity Play Mode; "+checks+" integration checks; all nine seals, three 3D worlds, pause, failure, replay, save/resume and endless mode."):"FAIL: "+error;
             if(error==null&&SessionState.GetBool("Nebula.Smoke.Expansion",false))result="PASS: expansion Play Mode; "+checks+" checks; six encounters, guardians, shield, blessings, daily defeat, checkpoint isolation, progression, collectibles, wardrobe, atlas pause and three spatial races.";
-            Directory.CreateDirectory("TestResults");File.WriteAllText(apiOnce?"TestResults/Unity-api-result.txt":renderOnly?"TestResults/Unity-render-result.txt":"TestResults/Unity-smoke-result.txt",result);
-            if(SessionState.GetBool("Nebula.Smoke.Expansion",false))File.WriteAllText("TestResults/Unity-expansion-result.txt",result);
+            if(error==null&&SessionState.GetBool("Nebula.Smoke.Combat",false))result="PASS: combat Play Mode; "+checks+" checks; five difficulties, equal flash/slot counts, enemy telegraphs, dodge immunity, melee kills, projectile blocking/collision, pause, lethal damage, full restart and preserved permanent progression.";
+            Directory.CreateDirectory("TestResults");
+            string resultPath=SessionState.GetBool("Nebula.Smoke.Combat",false)?"TestResults/Unity-combat-result.txt":SessionState.GetBool("Nebula.Smoke.Expansion",false)?"TestResults/Unity-expansion-result.txt":apiOnce?"TestResults/Unity-api-result.txt":renderOnly?"TestResults/Unity-render-result.txt":"TestResults/Unity-smoke-result.txt";
+            File.WriteAllText(resultPath,result);
             SessionState.SetInt("Nebula.Smoke.ExitCode",error==null?0:1);
             Debug.Log(result);EditorApplication.isPlaying=false;
         }
@@ -226,10 +234,13 @@ namespace EcosDeNebula.Editor
             else PlayerPrefs.DeleteKey(Key);
             if(SessionState.GetBool("Nebula.Smoke.HadProgress",false))PlayerPrefs.SetString("EcosDeNebula.Progress.v1",SessionState.GetString("Nebula.Smoke.ProgressBackup",""));
             else PlayerPrefs.DeleteKey("EcosDeNebula.Progress.v1");
+            if(SessionState.GetBool("Nebula.Smoke.HadDifficulty",false))PlayerPrefs.SetInt("EcosDeNebula.Difficulty.v1",SessionState.GetInt("Nebula.Smoke.DifficultyBackup",1));
+            else PlayerPrefs.DeleteKey("EcosDeNebula.Difficulty.v1");
             PlayerPrefs.Save();SessionState.SetBool(Flag,false);SessionState.SetBool("Nebula.Smoke.RenderOnly",false);
             SessionState.SetBool("Nebula.Smoke.ApiOnce",false);
             SessionState.SetBool("Nebula.Smoke.Expansion",false);
             SessionState.SetBool("Nebula.Smoke.Guardians",false);
+            SessionState.SetBool("Nebula.Smoke.Combat",false);
             EditorApplication.update-=Tick;Application.logMessageReceived-=OnLog;
             EditorApplication.Exit(SessionState.GetInt("Nebula.Smoke.ExitCode",1));
         }

@@ -19,6 +19,7 @@ namespace EcosDeNebula.Editor
             JourneyPhase phase=Get<JourneyPhase>("phase");
             if(stage==0)
             {
+                Set("difficulty",1);
                 Set("progress",new NebulaProgress{aegis=1,vitality=1});
                 var save=Get<NebulaSave>("save");save.world=1;save.seals=2;save.score=600;save.fragments=0;save.completed=false;
                 campaignSnapshot=JsonUtility.ToJson(save);
@@ -34,11 +35,11 @@ namespace EcosDeNebula.Editor
             }
             else if(stage==2&&phase==JourneyPhase.Answering)
             {
-                int expected=Get<PatternAttempt>("attempt").Expected;
-                Call("Submit",(expected+1)%4);
-                Check(Get<ExpeditionRun>("expedition").Hearts==4,"Shield prevents heart loss");
-                Check(Get<PatternAttempt>("attempt").Position==0&&!Get<PatternAttempt>("attempt").Failed,"Shield preserves input state");
-                Check(Get<ExpeditionRun>("expedition").Shields==0,"Shield consumed once");stage=3;
+                int health=Get<CombatLife>("combat").Health;
+                Call("DamagePlayer");
+                Check(Get<CombatLife>("combat").Health==health,"Shield prevents enemy damage");
+                Check(Get<PatternAttempt>("attempt").Position==0&&!Get<PatternAttempt>("attempt").Failed,"Enemy damage does not submit a rune");
+                Check(Get<CombatLife>("combat").Shields==0,"Shield consumed once");stage=3;
             }
             else if(stage==3)
             {
@@ -69,9 +70,9 @@ namespace EcosDeNebula.Editor
             {
                 Call("BeginTrial");Set("phase",JourneyPhase.Answering);Set("lastInput",-10f);
                 Call("Submit",(Get<PatternAttempt>("attempt").Expected+1)%4);
-                if(Get<ExpeditionRun>("expedition").Finished)
+                if(Get<JourneyPhase>("phase")==JourneyPhase.Defeat)
                 {
-                    Check(Get<JourneyPhase>("phase")==JourneyPhase.Ending,"Daily defeat summary");
+                    Check(Get<ExpeditionRun>("expedition")==null,"One code error ends the entire daily expedition");
                     Check(Get<NebulaProgress>("progress").dailyRewardDate==0,"No daily reward for failure");
                     Call("ReturnHome");
                     var world=Get<NebulaWorld>("world");

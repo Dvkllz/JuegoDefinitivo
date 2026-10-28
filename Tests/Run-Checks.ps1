@@ -16,9 +16,13 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'No se pudo compilar la prueba de expediciones.' }
     & .\TestResults\ExpeditionTests.exe
     if ($LASTEXITCODE -ne 0) { throw 'Fallaron las pruebas de expediciones.' }
+    & $nebulaCompiler /nologo /out:TestResults\CombatTests.exe Assets\EcosDeNebula\Scripts\PatternDirector.cs Assets\EcosDeNebula\Scripts\ExpeditionRules.cs Assets\EcosDeNebula\Scripts\StarRace.cs Assets\EcosDeNebula\Scripts\CombatRules.cs Tests\CombatTests.cs
+    if ($LASTEXITCODE -ne 0) { throw 'No se pudo compilar la prueba de combate.' }
+    & .\TestResults\CombatTests.exe
+    if ($LASTEXITCODE -ne 0) { throw 'Fallaron las pruebas de combate.' }
     if ($Unity) {
         if (!(Test-Path -LiteralPath $UnityPath)) { throw 'No se encontró Unity; especifica -UnityPath.' }
-        foreach ($nebulaMethod in @('Run', 'Expansion')) {
+        foreach ($nebulaMethod in @('Run', 'Expansion', 'Combat')) {
             $nebulaLog = Join-Path $nebulaRoot "TestResults\Unity-$nebulaMethod.log"
             $nebulaProcess = Start-Process -FilePath $UnityPath -ArgumentList @('-batchmode', '-projectPath', "`"$nebulaRoot`"", '-executeMethod', "EcosDeNebula.Editor.NebulaSmokeTest.$nebulaMethod", '-logFile', "`"$nebulaLog`"") -WindowStyle Hidden -PassThru -Wait
             if ($nebulaProcess.ExitCode -ne 0) { throw "Falló Unity $nebulaMethod. Revisa $nebulaLog" }
