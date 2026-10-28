@@ -32,8 +32,8 @@ namespace EcosDeNebula
             {
                 Vector3 p=view.WorldToScreenPoint(e.Visual.Root.position+Vector3.up*1.65f);
                 if(p.z<0)continue;
-                Rect r=new Rect(p.x/uiScale-63,(Screen.height-p.y)/uiScale-15,126,28);
-                Box(r,ink);Label(r,(e.Visual.Ranged?"TIRADOR":"SOMBRA")+" · "+e.Health,14,e.Windup>0?amber:paper,TextAnchor.MiddleCenter);
+                Rect r=new Rect(p.x/uiScale-25,(Screen.height-p.y)/uiScale-8,50,7);
+                Box(r,ink);Box(new Rect(r.x,r.y,50f*e.Health/Difficulty.EnemyHealth,7),e.Windup>0?amber:mint);
             }
         }
         void DefeatUI()

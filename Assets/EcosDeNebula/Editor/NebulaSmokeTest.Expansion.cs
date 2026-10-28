@@ -25,7 +25,7 @@ namespace EcosDeNebula.Editor
                 campaignSnapshot=JsonUtility.ToJson(save);
                 Call("StartExpedition",false);
                 Check(Get<NebulaWorld>("world").Biome==0,"Expedition starts in Jade");
-                Check(Get<ExpeditionRun>("expedition").Hearts==4,"Vitality adds a heart");
+                Check(Get<CombatLife>("combat").Health==5,"Vitality adds combat health to selected difficulty");
                 Set("panel",1);frozenClock=Get<float>("phaseClock");pauseUntil=now+0.6;stage=1;
             }
             else if(stage==1&&now>=pauseUntil)
@@ -62,7 +62,7 @@ namespace EcosDeNebula.Editor
                     Check(Get<NebulaProgress>("progress").runs==1&&Get<NebulaProgress>("progress").guardians==7,"All guardian progression awarded");
                     Call("ReturnHome");Check(Get<NebulaWorld>("world").Biome==1,"Campaign biome restored");
                     Call("StartExpedition",true);
-                    Check(Get<ExpeditionRun>("expedition").Hearts==3&&Get<ExpeditionRun>("expedition").Shields==0,"Daily ignores talents");
+                    Check(Get<CombatLife>("combat").Health==3&&Get<CombatLife>("combat").Shields==0,"Daily fixes Guardian difficulty and ignores talents");
                     stage=4;
                 }
             }

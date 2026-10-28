@@ -121,7 +121,7 @@ namespace EcosDeNebula
         {
             ClearCombatWave();
             if (world != null) { world.gameObject.SetActive(false); Destroy(world.gameObject); }
-            int biome=race!=null?race.Biome:expedition==null?save.world:expedition.Biome;
+            int biome=phase==JourneyPhase.Defeat?0:race!=null?race.Biome:expedition==null?save.world:expedition.Biome;
             GameObject root = new GameObject("Santuario · " + WorldNames[biome]);
             root.transform.SetParent(transform);
             world = root.AddComponent<NebulaWorld>(); world.Build(biome); world.ReducedMotion = reducedMotion;
@@ -285,6 +285,7 @@ namespace EcosDeNebula
                     phase = JourneyPhase.Answering; phaseClock = 0; answerClock = 0; highlighted = -1;
                     world.ClearRuneLight();StartCombatWave();
                 }
+                else if(shown>0&&noteClock>=-0.15f){world.CodeGap();highlighted=-1;}
             }
             else if (phase == JourneyPhase.Answering)
             {
@@ -602,6 +603,7 @@ namespace EcosDeNebula
             Label(new Rect(x+27,y+116,590,38),watching?trial.Demonstration.Length+" destellos = "+trial.Answer.Length+" respuestas. Los enemigos entran al responder.":"1–4 · runas   WASD · mover   Q · esquivar   R · atacar",14,dim);
             if(watching)Label(new Rect(x+647,y+60,190,48),shown+" / "+trial.Demonstration.Length,30,paper,TextAnchor.MiddleCenter,true);
             else if(Button(new Rect(x+633,y+57,211,47),"Volver a escuchar",false,!paused&&!showHelp))Replay();
+            if(watching)Label(new Rect(x+647,y+110,190,34),highlighted<0?"PAUSA":"RUNA "+(highlighted+1),21,highlighted<0?dim:NebulaWorld.RuneColors[highlighted],TextAnchor.MiddleCenter);
             if(!watching)
             {
                 bool enabled=!paused&&!showHelp;

@@ -323,8 +323,9 @@ namespace EcosDeNebula
                 r.Crystal.localPosition=r.Position+Vector3.up*(1.35f+(ReducedMotion?0:Mathf.Sin(clock*1.6f+i)*0.10f));
                 if(!ReducedMotion) r.Crystal.Rotate(0,dt*(12+i*2),0,Space.Self);
                 r.Crystal.localScale=Vector3.one*(1+r.Glow*0.15f);
-                r.Renderer.sharedMaterial.SetColor("_EmissionColor",r.Color*(0.35f+r.Glow*2.5f));
-                r.Light.intensity=0.5f+r.Glow*3;
+                bool dimmed=codeFocus!=-1&&i!=codeFocus;
+                r.Renderer.sharedMaterial.SetColor("_EmissionColor",r.Color*(dimmed?0.025f:0.35f+r.Glow*2.5f));
+                r.Light.intensity=dimmed?0.025f:0.5f+r.Glow*3;
                 r.Halo.localScale=Vector3.one*(1+r.Glow*0.35f);
             }
             if(ReducedMotion) return;

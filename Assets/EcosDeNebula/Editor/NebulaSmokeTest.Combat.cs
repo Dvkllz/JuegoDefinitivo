@@ -20,7 +20,12 @@ namespace EcosDeNebula.Editor
                 Set("difficulty",combatDifficulty);Set("progress",new NebulaProgress{xp=600,dust=200,skin=1});
                 Call("StartJourney",true);
                 var save=Get<NebulaSave>("save");save.world=2;save.seals=2;save.score=600;save.fragments=9;
-                Call("BuildWorld");Call("BeginTrial");stage=1;
+                Call("BuildWorld");
+                var world=Get<NebulaWorld>("world");world.CodePulse(2);world.Animate(0.01f);
+                Check(world.Runes[2].Light.intensity>3&&world.Runes[0].Light.intensity<0.1f,"Only the current code crystal is bright");
+                world.CodeGap();world.Animate(0.01f);Check(world.Runes[2].Light.intensity<0.1f,"A visible dark gap separates flashes");
+                world.ClearRuneLight();world.Animate(0.01f);Check(world.Runes[0].Light.intensity>=0.5f,"Normal lighting restored after code");
+                Call("BeginTrial");stage=1;
             }
             else if(stage==1&&Get<JourneyPhase>("phase")==JourneyPhase.Answering)
             {

@@ -11,10 +11,11 @@ namespace EcosDeNebula
     {
         Material enemyBody, enemyEye, enemyWarning, shotMaterial, strikeMaterial;
         Transform strikeRing;
+        int codeFocus=-1;
         void CombatMaterials()
         {
             if(enemyBody!=null)return;
-            enemyBody=Mat(new Color(0.14f,0.055f,0.21f));
+            enemyBody=Mat(new Color(0.3f,0.09f,0.37f),0.12f);
             enemyEye=Mat(new Color(1f,0.3f,0.18f),2);
             enemyWarning=Mat(new Color(1f,0.17f,0.15f),1.8f);
             shotMaterial=Mat(new Color(1f,0.65f,0.14f),2);
@@ -68,12 +69,14 @@ namespace EcosDeNebula
         }
         public void ClearRuneLight()
         {
+            codeFocus=-1;
             celebration=0;
             foreach(var rune in Runes){rune.Glow=0;rune.Light.intensity=0.5f;}
         }
         public void CodePulse(int rune)
         {
-            ClearRuneLight();Pulse(rune);
+            ClearRuneLight();codeFocus=rune;Pulse(rune);
         }
+        public void CodeGap(){codeFocus=-2;}
     }
 }
