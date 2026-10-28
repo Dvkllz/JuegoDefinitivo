@@ -23,7 +23,7 @@ static class PatternDirectorTests
                 for (int i = 0; i < trial.Answer.Length; i++) Check(trial.Answer[i] == trial.Demonstration[trial.Answer.Length - 1 - i], "Mirror");
             if (world == 2)
             {
-                Check(trial.Demonstration.Length == trial.Answer.Length * 2, "Observable period");
+                Check(trial.Demonstration.Length == trial.Answer.Length, "One response per visible flash");
                 Check(trial.Answer[0] != trial.Answer[1], "Nontrivial motif");
                 for (int i = 0; i < trial.Demonstration.Length; i++) Check(trial.Demonstration[i] == trial.Answer[i % trial.Answer.Length], "Prediction");
             }

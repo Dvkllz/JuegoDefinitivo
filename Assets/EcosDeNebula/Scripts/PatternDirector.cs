@@ -50,6 +50,21 @@ namespace EcosDeNebula
         public string Constellation = "orbit";
         public string Model = "";
         public bool GeneratedByApi;
+
+        // Playback contract: each visible flash always has one input slot, regardless of source.
+        public void PrepareCode(int length = 0)
+        {
+            if(Demonstration==null||Demonstration.Length==0||Answer==null||Answer.Length==0)
+                throw new InvalidOperationException("Empty code");
+            foreach(int rune in Demonstration)if(rune<0||rune>3)throw new InvalidOperationException("Invalid rune");
+            foreach(int rune in Answer)if(rune<0||rune>3)throw new InvalidOperationException("Invalid answer");
+            int count=length>0?Math.Max(3,Math.Min(7,length)):Demonstration.Length;
+            int[] visible=new int[count],response=new int[count];
+            for(int i=0;i<count;i++){visible[i]=Demonstration[i%Demonstration.Length];response[i]=Answer[i%Answer.Length];}
+            if(Mode==PatternMode.Prediction)response=(int[])visible.Clone();
+            if(Mode==PatternMode.Mirror){response=(int[])visible.Clone();Array.Reverse(response);}
+            Demonstration=visible;Answer=response;
+        }
     }
 
     [Serializable]
@@ -155,7 +170,7 @@ namespace EcosDeNebula
                 trial.MotifLength = motifLength;
                 trial.Demonstration = new int[motifLength * 2];
                 for (int i = 0; i < trial.Demonstration.Length; i++) trial.Demonstration[i] = motif[i % motifLength];
-                trial.Answer = (int[])motif.Clone();
+                trial.Answer = (int[])trial.Demonstration.Clone();
             }
             else
             {
