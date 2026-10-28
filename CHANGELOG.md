@@ -1,5 +1,19 @@
 # Ecos de Nébula — La era de los guardianes
 
+## 28 de octubre de 2026 — Códigos bajo asedio
+
+- Corregido el contrato de presentación: el número de destellos siempre coincide con las casillas, también en códigos repetidos y al reproducir de nuevo.
+- Las celebraciones ya no contaminan el comienzo de la siguiente demostración; solo se ilumina la runa actual.
+- Cinco dificultades seleccionables: Aprendiz, Explorador, Guardián, Maestro y Pesadilla.
+- Combate durante la respuesta: sombras que persiguen y atacan cuerpo a cuerpo, centinelas con proyectiles y avisos rojos previos.
+- R: onda del bastón con alcance corto, daño, interrupción y bloqueo de proyectiles; Q: esquiva con invulnerabilidad breve.
+- Vida, escudos de combate, bajas, botones de combate y pantalla de derrota con reinicio desde el principio.
+- Un error de código termina inmediatamente el recorrido, aunque queden vida o escudos. Llegar a cero vida tiene el mismo efecto.
+- Se preservan desbloqueos y coleccionables. La derrota en expedición no borra la campaña independiente.
+- El desafío diario fija Guardián para mantener la misma dificultad; las carreras siguen siendo una actividad separada.
+
+Las notas del 24 de octubre siguientes describen el comportamiento anterior al combate.
+
 ## 24 de octubre de 2026
 
 Esta expansión mantiene la campaña y la integración de OpenAI existentes. Las nuevas expediciones y el desafío diario usan reglas locales deterministas y no consumen API.

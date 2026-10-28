@@ -1,5 +1,25 @@
 # Ecos de Nébula
 
+## Códigos bajo asedio — 28 de octubre de 2026
+
+**Cada destello corresponde ahora a una entrada.** Se corrigió el caso de cuatro luces y solo dos respuestas del Observatorio: hay que introducir el código completo, incluyendo las repeticiones. La pantalla indica ambos conteos y separa las luces de demostración de las celebraciones.
+
+Al responder aparecen **sombras perseguidoras** y **centinelas que disparan**. Sus círculos rojos anuncian el ataque. Muévete con WASD, esquiva con **Q** (0,32 s de invulnerabilidad) y ataca con **R**: una onda de alcance corto que golpea enemigos y destruye proyectiles cercanos. También hay botones de ataque/esquiva en pantalla. La demostración inicial es segura; los enemigos entran al responder. Pausa y Atlas detienen el combate.
+
+**Un código incorrecto o quedarse sin vida reinicia todo el recorrido**, no el mismo acertijo. En campaña se reinician mundo, sellos y puntuación del recorrido; en expedición se vuelve al primer encuentro sin borrar la campaña separada. Se conservan récords, XP, talentos, aspectos y memorias. Los escudos solo protegen de golpes enemigos, nunca de un código incorrecto.
+
+Elige la dificultad en el menú antes de jugar:
+
+| Dificultad | Runas / entradas | Vida base | Máximo de enemigos | Golpes para vencer un enemigo |
+| --- | --- | --- | --- | --- |
+| Aprendiz | 3 | 5 | 1 | 1 |
+| Explorador | 4 | 4 | 2 | 1 |
+| Guardián | 5 | 3 | 3 | 2 |
+| Maestro | 6 | 2 | 4 | 2 |
+| Pesadilla | 7 | 1 | 5 | 3 |
+
+Las dificultades superiores también aceleran enemigos, proyectiles y la demostración. Los talentos de vida/escudo se aplican a expediciones normales. El desafío diario fija **Guardián**, sin talentos. Las carreras mantienen sus propias reglas y no tienen enemigos.
+
 ## Nueva expansión: La era de los guardianes
 
 Además de la campaña original, ahora puedes jugar expediciones de seis encuentros, enfrentarte a tres guardianes con reglas propias, elegir bendiciones y conseguir XP, esencia, talentos y cuatro capas. El Atlas (TAB) reúne viajes, taller, doce logros y doce memorias de historia.
@@ -35,9 +55,9 @@ Luma, una pequeña guardiana con capa y bastón luminoso, viaja por un archipié
 | --- | --- |
 | Bosque de Jade | Recuerda la secuencia y repítela. |
 | Mar de Ámbar | Devuelve la secuencia en orden inverso. |
-| Observatorio Violeta | Observa un bloque repetido dos veces y completa la siguiente repetición. |
+| Observatorio Violeta | Devuelve el código completo, incluidas todas sus repeticiones. |
 
-Tres sellos por mundo, nueve en total, final de la historia y modo Constelación de patrones ilimitados. Los errores permiten reintentar; no eliminan sellos. Pedir otra reproducción reduce la puntuación de ese sello, pero permite avanzar.
+Tres sellos por mundo, nueve en total, final de la historia y modo Constelación de patrones ilimitados. Un error de código o perder toda la vida devuelve la campaña al primer santuario, sin sellos ni puntos de recorrido. Pedir otra reproducción cuenta como ayuda y reduce la recompensa, pero no es un fallo.
 
 La nueva edición incluye **doce fragmentos de memoria** para encontrar caminando, botones de runas en pantalla, pistas durante el reto, celebraciones de luz y escenarios diferenciados: bosque mineral, velas de ámbar y columnas astrales. Cada fragmento añade 40 destellos y se guarda con tu progreso.
 
@@ -55,10 +75,11 @@ La nueva edición incluye **doce fragmentos de memoria** para encontrar caminand
 | Pausa | Esc |
 | Atlas / taller / diario | TAB |
 | Impulso | Q (recarga visible en el HUD) |
+| Atacar / interceptar proyectiles | R (onda a 3 metros, recarga de 0,48 s) |
 | Brújula de memorias o balizas | Mantener C |
 | Revelar la siguiente runa | F (cuenta como ayuda) |
 
-La pausa ofrece sonido y movimiento reducido. Las runas se distinguen por número, nombre, forma, color y sonido. No hay límite de tiempo.
+La pausa ofrece sonido y movimiento reducido. Las runas se distinguen por número, nombre, forma, color y sonido. Los códigos no tienen cronómetro, pero los enemigos presionan mientras respondes; las carreras sí tienen un límite de 65 segundos.
 
 ## Qué hace la IA
 
