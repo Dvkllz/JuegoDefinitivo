@@ -22,7 +22,7 @@ namespace EcosDeNebula
                 Box(new Rect(x,461,426,68),ink);
                 Label(new Rect(x+25,479,380,34),"NIVEL "+progress.Level+"   /   "+progress.dust+" ESENCIA   /   "+BitCount(progress.achievements)+" LOGROS",12,mint);
             }
-            else if(phase!=JourneyPhase.Ending)
+            else if(phase!=JourneyPhase.Ending&&phase!=JourneyPhase.Defeat)
             {
                 Box(new Rect(30,514,272,127),ink);
                 Label(new Rect(50,528,231,20),"LUMA · NIVEL "+progress.Level+"   /   "+progress.dust+" ESENCIA",11,mint);
@@ -61,7 +61,7 @@ namespace EcosDeNebula
                 string best=progress.raceBest[i]>0?" · "+progress.raceBest[i].ToString("0.0")+" s":"";
                 if(Button(new Rect(cx+20,y+369,295,32),"Carrera 3D"+best,false,phase==JourneyPhase.Home))StartRace(i);
             }
-            Label(new Rect(x+34,y+423,1020,64),"La expedición es una aventura independiente: tres corazones, seis pruebas y una bendición entre encuentros. Los errores gastan corazones; tu campaña nunca pierde sellos. Al retirarte conservas las recompensas obtenidas, pero el recorrido empieza de nuevo.",17,paper);
+            Label(new Rect(x+34,y+423,1020,64),"Seis códigos bajo ataque y una bendición entre encuentros. R golpea y desvía proyectiles; Q esquiva. Un código incorrecto o perder toda la vida termina la expedición: vuelves al primer encuentro. La campaña guardada queda separada.",17,paper);
             int today=ExpeditionRun.DailySeed(DateTime.UtcNow);
             Label(new Rect(x+34,y+505,1020,48),"DIARIO · "+DateTime.UtcNow.ToString("yyyy-MM-dd")+" UTC · Mejor: "+(progress.dailyDate==today?progress.dailyBest:0)+"\nSemilla fija local. Talentos desactivados. Bonificación de victoria: una vez al día. Sin clasificación en línea.",14,dim);
             bool canStart=phase==JourneyPhase.Home;
@@ -73,7 +73,7 @@ namespace EcosDeNebula
         void WorkshopPanel(float x,float y)
         {
             string[] names={"Corazón de raíz","Égida de cristal","Paso de brisa"};
-            string[] descriptions={"+1 corazón inicial por rango en expediciones normales.","Absorbe un error por rango sin perder posición ni corazón.","Reduce 0,65 s la recarga del impulso Q por rango."};
+            string[] descriptions={"+1 vida máxima por rango en expediciones normales.","Absorbe un golpe enemigo por rango. Nunca protege un código incorrecto.","Reduce 0,65 s la recarga del impulso de exploración por rango. En combate: 1,8 s."};
             for(int i=0;i<3;i++)
             {
                 float cx=x+30+i*352;int rank=progress.TalentRank(i);
@@ -146,7 +146,7 @@ namespace EcosDeNebula
             Label(new Rect(50,132,232,24),expedition.Daily?"DESAFÍO DIARIO · LOCAL":"EXPEDICIÓN · LOCAL",11,mint);
             Label(new Rect(49,171,232,74),WorldNames[world.Biome],29,paper,TextAnchor.UpperLeft,true);
             Label(new Rect(50,267,232,33),"ENCUENTROS   "+expedition.Round+" / 6",12,mint);
-            Label(new Rect(50,314,232,40),"CORAZONES   "+expedition.Hearts+"\nESCUDOS   "+expedition.Shields,14,paper);
+            Label(new Rect(50,314,232,47),"UN CÓDIGO INCORRECTO\nREINICIA LA EXPEDICIÓN",14,amber);
             Label(new Rect(49,382,232,43),expedition.Score.ToString("N0"),33,paper,TextAnchor.UpperLeft,true);
             Label(new Rect(50,444,232,30),"RACHA   "+expedition.Combo+"   /   FORTUNA   "+expedition.Fortune,11,dim);
             Box(new Rect(uiW-278,112,248,272),ink);
@@ -180,7 +180,7 @@ namespace EcosDeNebula
             Box(new Rect(x-20,y-85,940,350),ink);
             Label(new Rect(x,y-64,900,44),"Elige qué llevar al siguiente encuentro",32,paper,TextAnchor.MiddleCenter,true);
             string[] titles={"Refugio","Paciencia","Fortuna"};
-            string[] body={"Recupera un corazón.\nMáximo: cinco.","Escucha más despacio.\n+0,15 s por nota.","Cada encuentro otorga\n50 puntos adicionales."};
+            string[] body={"Recupera una vida.\nHasta tu vida máxima.","Escucha más despacio.\n+0,15 s por nota.","Cada encuentro otorga\n50 puntos adicionales."};
             for(int i=0;i<3;i++)
             {
                 float cx=x+i*310;

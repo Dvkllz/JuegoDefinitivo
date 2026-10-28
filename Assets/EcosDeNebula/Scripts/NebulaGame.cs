@@ -19,7 +19,7 @@ namespace EcosDeNebula
         public int fragments;
     }
 
-    public enum JourneyPhase { Home, Briefing, Watching, Answering, Success, Retry, Crossing, Ending, Generating, Blessing, Race }
+    public enum JourneyPhase { Home, Briefing, Watching, Answering, Success, Retry, Crossing, Ending, Generating, Blessing, Race, Defeat }
 
     public sealed partial class NebulaGame : MonoBehaviour
     {
@@ -29,11 +29,11 @@ namespace EcosDeNebula
         public static readonly string[] RuneNames = { "HOJA", "SOL", "MAREA", "ESTRELLA" };
         static readonly string[] WorldNames = { "Bosque de Jade", "Mar de Ámbar", "Observatorio Violeta" };
         static readonly string[] WorldSubtitles = { "Donde los árboles recuerdan", "El tiempo fluye en dos sentidos", "El cielo todavía está por escribir" };
-        static readonly string[] WorldRules = { "Repite los cristales en el mismo orden.", "Repite los cristales en orden inverso.", "Descubre el bloque que se repite y escríbelo una vez más." };
+        static readonly string[] WorldRules = { "Repite el código completo en el mismo orden.", "Repite el código completo en orden inverso.", "Repite TODO el código, incluidas sus repeticiones." };
         static readonly string[] WorldStories = {
             "El Bosque de Jade ha olvidado su canción. Escucha los cristales y devuelve sus ecos al corazón del santuario.",
             "El Mar de Ámbar guarda recuerdos al revés. Aquí, el último eco que escuchas debe ser el primero que devuelvas.",
-            "Las estrellas hablan con patrones. Observa dos repeticiones del mismo bloque y completa la tercera."
+            "Las estrellas hablan con patrones. Devuelve el código completo: cada destello corresponde a una respuesta, también si se repite."
         };
         readonly Color ink = new Color(0.045f, 0.085f, 0.12f, 0.96f);
         readonly Color paper = new Color(0.88f, 0.94f, 0.90f);
@@ -76,6 +76,7 @@ namespace EcosDeNebula
             reducedMotion = PlayerPrefs.GetInt(MotionKey, 0) == 1;
             LoadJourney();
             LoadProgress();
+            difficulty=Mathf.Clamp(PlayerPrefs.GetInt(DifficultyKey,1),0,4);
             serif = Font.CreateDynamicFontFromOSFont(new[] { "Georgia", "Cambria", "Times New Roman" }, 64);
             sans = Font.CreateDynamicFontFromOSFont(new[] { "Segoe UI", "Arial", "Liberation Sans" }, 24);
             GameObject cameraObject = new GameObject("Cámara de Nébula", typeof(Camera), typeof(AudioListener));
@@ -112,11 +113,13 @@ namespace EcosDeNebula
             PlayerPrefs.SetString(SaveKey, JsonUtility.ToJson(save));
             PlayerPrefs.SetInt(MuteKey, muted ? 1 : 0);
             PlayerPrefs.SetInt(MotionKey, reducedMotion ? 1 : 0);
+            PlayerPrefs.SetInt(DifficultyKey,difficulty);
             PlayerPrefs.Save(); hasSave = true;
         }
 
         void BuildWorld()
         {
+            ClearCombatWave();
             if (world != null) { world.gameObject.SetActive(false); Destroy(world.gameObject); }
             int biome=race!=null?race.Biome:expedition==null?save.world:expedition.Biome;
             GameObject root = new GameObject("Santuario · " + WorldNames[biome]);
@@ -142,6 +145,7 @@ namespace EcosDeNebula
                 save.completed = true; phase = JourneyPhase.Ending; SaveJourney(); return;
             }
             phase = save.seals >= 3 ? JourneyPhase.Crossing : JourneyPhase.Briefing;
+            NewCombatRun();
             phaseClock = 0; paused = false; showHelp = false;
         }
 
@@ -162,6 +166,7 @@ namespace EcosDeNebula
         {
             trial = director.Create(save.world, endless ? 2 : save.seals);
             trial.Hint=WorldRules[save.world];
+            trial.Intent=Difficulty.Name+" · "+Difficulty.CodeLength+" destellos y el mismo número de respuestas. Prepárate para esquivar al responder.";
             trial.Title=save.world==0?"El canto de las hojas":save.world==1?"Memorias a contraluz":"La danza de las estrellas";
         }
 
@@ -182,6 +187,10 @@ namespace EcosDeNebula
 
         void PlaySequence()
         {
+            ClearCombatWave();world.ClearRuneLight();
+            trial.PrepareCode(expedition==null?Difficulty.CodeLength:0);
+            if(trial.Mode==PatternMode.Prediction)trial.Hint="Repite el código completo, incluidas todas sus repeticiones.";
+            trial.BeatSeconds=Difficulty.Beat+(expedition==null?0:expedition.Patience*0.15f);
             phase = JourneyPhase.Watching; shown = 0; highlighted = -1;
             noteClock = -0.65f; phaseClock = 0; answerClock = 0;
             attempt = new PatternAttempt(trial.Answer); walkingToRune = false;
@@ -206,11 +215,11 @@ namespace EcosDeNebula
             if (!correct)
             {
                 lastWrong = expected; director.Finish(false, assisted);
-                phase = JourneyPhase.Retry; phaseClock = 0; flash = 0.3f;
-                Play(errorSound); SaveJourney();
+                Play(errorSound);FailRun("Código incorrecto: se esperaba la runa "+(expected+1)+".");
             }
             else if (attempt.Complete)
             {
+                WinCombatWave();
                 if(!assisted)save.perfectSeals++;
                 director.Finish(true, assisted);
                 scoreGain = trial.Answer.Length * (assisted ? 55 : 100) + Mathf.Min(director.Profile.streak, 5) * 40;
@@ -257,21 +266,24 @@ namespace EcosDeNebula
             world.Animate(dt); UpdateCamera(dt, false); UpdateAudio();
             UpdateExpansion(dt);
             if(phase==JourneyPhase.Generating)return;
-            if (phase == JourneyPhase.Home || phase == JourneyPhase.Ending || phase == JourneyPhase.Crossing || phase==JourneyPhase.Blessing) return;
+            if (phase == JourneyPhase.Home || phase == JourneyPhase.Ending || phase == JourneyPhase.Crossing || phase==JourneyPhase.Blessing || phase==JourneyPhase.Defeat) return;
             if(phase==JourneyPhase.Race&&(raceCountdown>0||race.Finished)){UpdateRace(dt);return;}
             MoveLuma(dt);
             if(phase==JourneyPhase.Race){UpdateRace(dt);return;}
+            UpdateCombat(dt);
+            if(phase==JourneyPhase.Defeat)return;
             if (phase == JourneyPhase.Watching)
             {
                 noteClock += dt;
                 if (noteClock >= 0 && shown < trial.Demonstration.Length)
                 {
-                    highlighted = trial.Demonstration[shown]; world.Pulse(highlighted); Play(notes[highlighted]);
+                    highlighted = trial.Demonstration[shown]; world.CodePulse(highlighted); Play(notes[highlighted]);
                     shown++; noteClock = -trial.BeatSeconds;
                 }
                 if (shown == trial.Demonstration.Length && noteClock >= 0)
                 {
                     phase = JourneyPhase.Answering; phaseClock = 0; answerClock = 0; highlighted = -1;
+                    world.ClearRuneLight();StartCombatWave();
                 }
             }
             else if (phase == JourneyPhase.Answering)
@@ -310,7 +322,7 @@ namespace EcosDeNebula
             float scale = Mathf.Min(Screen.width / 1600f, Screen.height / 900f);
             Vector2 mouse = new Vector2(Input.mousePosition.x / scale, (Screen.height - Input.mousePosition.y) / scale);
             float w = Screen.width / scale, h = Screen.height / scale;
-            return panel!=0 || mouse.y < 100 || mouse.y > h - 270 || (mouse.x < 315 && mouse.y < 655) || (mouse.x > w - 290 && mouse.y < 580);
+            return panel!=0 || mouse.y < 145 || mouse.y > h - 270 || (mouse.x < 315 && mouse.y < 825) || (mouse.x > w - 290 && mouse.y < 580);
         }
 
         void MoveLuma(float dt)
@@ -335,16 +347,8 @@ namespace EcosDeNebula
             if (direction.sqrMagnitude > 0.01f)
             {
                 Vector3 next = world.Luma.position + direction * (dashTime>0?13f:Input.GetKey(KeyCode.LeftShift) ? 5.2f : 3.5f) * dt;
-                Vector2 plane = Vector2.ClampMagnitude(new Vector2(next.x, next.z), 7.4f);
-                // Keep the guardian outside the solid central altar and crystal pedestals.
-                if (plane.magnitude < 1.95f) plane = plane.normalized * 1.95f;
-                for (int i=0; i<4; i++)
-                {
-                    Vector2 p = new Vector2(world.Runes[i].Position.x, world.Runes[i].Position.z);
-                    Vector2 delta = plane - p;
-                    if (delta.magnitude < 1.12f) plane = p + (delta.sqrMagnitude < 0.001f ? Vector2.down : delta.normalized) * 1.12f;
-                }
-                world.Luma.position = new Vector3(plane.x, 0.1f + (reducedMotion ? 0 : Mathf.Abs(Mathf.Sin(Time.unscaledTime * 10)) * 0.055f), plane.y);
+                next=world.Walkable(next);
+                world.Luma.position = new Vector3(next.x, 0.1f + (reducedMotion ? 0 : Mathf.Abs(Mathf.Sin(Time.unscaledTime * 10)) * 0.055f), next.z);
                 world.Luma.rotation = Quaternion.Slerp(world.Luma.rotation, Quaternion.LookRotation(direction), dt * 12);
             }
             selected = -1; float closest = 2.6f;
@@ -428,7 +432,7 @@ namespace EcosDeNebula
             if(phase==JourneyPhase.Home) HomeUI();
             else
             {
-                if(phase!=JourneyPhase.Ending) JourneyUI();
+                if(phase!=JourneyPhase.Ending&&phase!=JourneyPhase.Defeat) JourneyUI();
                 if(phase==JourneyPhase.Briefing) BriefingUI();
                 if(phase==JourneyPhase.Watching || phase==JourneyPhase.Answering) TrialUI();
                 if(phase==JourneyPhase.Generating) GeneratingUI();
@@ -437,8 +441,10 @@ namespace EcosDeNebula
                 if(phase==JourneyPhase.Crossing) CrossingUI();
                 if(phase==JourneyPhase.Ending) EndingUI();
                 if(phase==JourneyPhase.Blessing) BlessingUI();
+                if(phase==JourneyPhase.Defeat) DefeatUI();
             }
             ExpansionUI();
+            CombatUI();
             if(toastTime>0 && !paused && !showHelp) { Box(new Rect(uiW/2-270,uiH-238,540,34),ink); Label(new Rect(uiW/2-258,uiH-233,516,24),toast,14,mint,TextAnchor.MiddleCenter); }
             if(flash>0) Box(new Rect(0,0,uiW,uiH),new Color(0.7f,0.25f,0.13f,flash*0.12f));
             if(paused) PauseUI();
@@ -494,7 +500,7 @@ namespace EcosDeNebula
             Label(new Rect(66,194,485,185),"El mundo tiene\nun patrón.",66,paper,TextAnchor.UpperLeft,true);
             Label(new Rect(72,389,434,81),"Encuéntralo. Despierta sus islas.\nUna inteligencia que aprende de ti\nteje cada nuevo desafío.",21,new Color(0.67f,0.79f,0.78f));
             RuleLine(74,500,425);
-            Label(new Rect(74,523,416,54),"Eres Luma, la última guardiana de un cielo que ha perdido sus recuerdos.",17,paper);
+            Label(new Rect(74,523,416,54),"Descifra los códigos. Esquiva y combate. Un error te devuelve al primer santuario.",17,paper);
             bool resume=hasSave&&(save.score>0||save.learning.trials>0||save.completed);
             if(Button(new Rect(74,608,424,61),resume?"Continuar mi viaje   →":"Despertar el primer eco   →",true)) StartJourney(false);
             if(resume)
@@ -502,7 +508,7 @@ namespace EcosDeNebula
                 Label(new Rect(76,683,420,25),WorldNames[save.world]+"  ·  "+save.score+" destellos",14,dim);
                 if(Button(new Rect(74,724,200,43),"Nueva aventura")) {showHelp=false; paused=true;}
             }
-            else Label(new Rect(74,689,435,42),"Sin prisas. Sin vidas que perder.\nSolo tú, los cristales y el siguiente descubrimiento.",14,dim);
+            else Label(new Rect(74,689,435,42),"Elige una de cinco dificultades.\nTu nivel y tus aspectos permanecen al caer.",14,dim);
             Label(new Rect(74,uiH-68,460,28),"3 SANTUARIOS    /    9 SELLOS    /    "+(ai.Configured?"OPENAI + LOCAL":"MODO LOCAL"),11,mint);
             Box(new Rect(uiW-406,uiH-153,360,105),ink);
             Label(new Rect(uiW-385,uiH-137,319,21),"EL TEJEDOR",12,mint);
@@ -593,16 +599,9 @@ namespace EcosDeNebula
                 if(watching&&i==shown-1)Box(new Rect(r.x,r.yMax-2,r.width,2),NebulaWorld.RuneColors[trial.Demonstration[i]]);
                 Label(r,watching&&i<shown?(trial.Demonstration[i]+1).ToString():filled?"✓":"·",20,filled?mint:dim,TextAnchor.MiddleCenter);
             }
-            Label(new Rect(x+27,y+120,550,24),watching?"Mira qué cristales se iluminan. Todavía no tienes que responder.":"1 2 3 4 · runas     WASD · caminar     E · activar     ← → · cámara",12,dim);
+            Label(new Rect(x+27,y+116,590,38),watching?trial.Demonstration.Length+" destellos = "+trial.Answer.Length+" respuestas. Los enemigos entran al responder.":"1–4 · runas   WASD · mover   Q · esquivar   R · atacar",14,dim);
             if(watching)Label(new Rect(x+647,y+60,190,48),shown+" / "+trial.Demonstration.Length,30,paper,TextAnchor.MiddleCenter,true);
             else if(Button(new Rect(x+633,y+57,211,47),"Volver a escuchar",false,!paused&&!showHelp))Replay();
-            if(!watching && trial.Mode==PatternMode.Prediction)
-            {
-                Box(new Rect(uiW/2-223,y-116,446,42),ink);
-                string symbols="";
-                for(int i=0;i<trial.Demonstration.Length;i++) symbols+=(trial.Demonstration[i]+1)+(i==trial.MotifLength-1?"   /   ":"  ");
-                Label(new Rect(uiW/2-214,y-109,428,27),symbols+" /   ?",19,mint,TextAnchor.MiddleCenter);
-            }
             if(!watching)
             {
                 bool enabled=!paused&&!showHelp;
@@ -697,10 +696,10 @@ namespace EcosDeNebula
             float x=uiW/2-380,y=uiH/2-330;
             Box(new Rect(x,y,760,660),ink);
             Label(new Rect(x+35,y+27,690,59),"Todo empieza por escuchar.",39,paper,TextAnchor.UpperLeft,true);
-            Label(new Rect(x+36,y+103,680,66),"Observa la secuencia de luces y sonidos. Después, activa los cristales siguiendo la regla del santuario. Restaura tres sellos para viajar al siguiente mundo.",18,paper);
+            Label(new Rect(x+36,y+103,680,66),"Cada destello tiene una casilla de respuesta. Introduce el código mientras esquivas y combates. Un código incorrecto o perder toda la vida reinicia el recorrido; conservas nivel, aspectos y memorias.",18,paper);
             RuleLine(x+36,y+194,688);
-            Label(new Rect(x+36,y+220,320,155),"1–4 o clic: activar runas\nWASD: mover a Luma\nE: activar cristal cercano\nMayús: caminar más rápido",17,dim);
-            Label(new Rect(x+388,y+220,338,155),"← → o arrastre derecho: cámara\nRueda: acercar o alejar\nEspacio: escuchar de nuevo\nEsc: pausa / cerrar ayuda",17,dim);
+            Label(new Rect(x+36,y+220,320,155),"1–4 o clic: activar runas\nWASD: mover a Luma\nR: onda de ataque del bastón\nQ: esquiva con invulnerabilidad\nMayús: correr\nF: revelar siguiente runa",17,dim);
+            Label(new Rect(x+388,y+220,338,155),"← → o arrastre derecho: cámara\nRueda: acercar o alejar\nEspacio: escuchar de nuevo\nEsc: pausa / cerrar ayuda\nTAB: Atlas y taller\nC: brújula de memorias",17,dim);
             RuleLine(x+36,y+370,688);
             Label(new Rect(x+36,y+393,688,27),"OPENAI GENERATIVA + APRENDIZAJE LOCAL",12,mint);
             Label(new Rect(x+36,y+436,688,104),"Con Jugar-con-IA, OpenAI crea patrones, nombres y pistas a partir de tus estadísticas de runas. El juego valida cada reto. La clave queda en el puente local, nunca en el ejecutable. Si la API falla, sigues jugando en modo local; el panel indica el origen real del patrón. La API puede consumir saldo de tu cuenta.",16,dim);

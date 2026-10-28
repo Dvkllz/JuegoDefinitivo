@@ -29,7 +29,7 @@ namespace EcosDeNebula
             "Sube cada runa un lugar: 1→2, 2→3, 3→4, 4→1.",
             "Devuelve la secuencia desde el final al principio.",
             "Invierte el orden y luego sube cada runa un lugar.",
-            "Observa dos bloques iguales y completa el tercero.",
+            "Repite el código completo, incluidas sus repeticiones.",
             "Cambia cada runa por su opuesta: 1↔4 y 2↔3. Conserva el orden."
         };
 
@@ -40,14 +40,15 @@ namespace EcosDeNebula
             Shields = daily ? 0 : Math.Max(0, Math.Min(2, shieldBonus));
         }
 
-        public PatternTrial CreateTrial()
+        public PatternTrial CreateTrial(int codeLength = 0)
         {
             if (Finished || AwaitingBlessing) throw new InvalidOperationException("No active encounter");
             var rng = new Random(unchecked(Seed * 397 ^ Round * 7919));
             int length = Round == 4 ? 3 : 3 + Round / 2;
+            if(codeLength>0)length=Math.Max(3,Math.Min(7,codeLength));
             int[] motif = new int[length];
             for (int i = 0; i < length; i++) motif[i] = i == 0 ? rng.Next(4) : (motif[i-1] + 1 + rng.Next(3)) % 4;
-            int[] demo = new int[Round == 4 ? length * 2 : length];
+            int[] demo = new int[Round == 4 && codeLength==0 ? length * 2 : length];
             for (int i = 0; i < demo.Length; i++) demo[i] = motif[i % length];
             int[] answer = (int[])motif.Clone();
             if (Round == 2 || Round == 3) Array.Reverse(answer);
@@ -56,6 +57,7 @@ namespace EcosDeNebula
                 if (Round == 1 || Round == 3) answer[i] = (answer[i] + 1) % 4;
                 if (Round == 5) answer[i] = 3 - answer[i];
             }
+            if(Round==4)answer=(int[])demo.Clone();
             return new PatternTrial {
                 Mode = Round == 4 ? PatternMode.Prediction : PatternMode.Echo,
                 Demonstration = demo, Answer = answer, MotifLength = length,
@@ -66,13 +68,11 @@ namespace EcosDeNebula
             };
         }
 
-        // A shield absorbs a wrong input without advancing it; a lost heart restarts the encounter.
-        public bool AbsorbError()
+        // Pattern mistakes end the whole run; shields are for combat damage only.
+        public void Fail()
         {
-            if (Finished || AwaitingBlessing) return false;
-            Combo = 0;
-            if (Shields > 0) { Shields--; return true; }
-            Hearts--; return false;
+            if(Finished)return;
+            Combo=0;Hearts=0;Shields=0;AwaitingBlessing=false;
         }
 
         public int Complete(bool assisted)

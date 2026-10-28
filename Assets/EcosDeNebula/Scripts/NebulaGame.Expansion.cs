@@ -46,18 +46,19 @@ namespace EcosDeNebula
             CancelGeneration();SaveJourney();panel=0;paused=false;showHelp=false;endless=false;
             dailyRunDate=ExpeditionRun.DailySeed(DateTime.UtcNow);
             expedition=new ExpeditionRun(daily?dailyRunDate:Environment.TickCount,daily,progress.vitality,progress.aegis);
+            NewCombatRun();
             expeditionSettled=false;trial=null;showHint=false;BuildWorld();PrepareExpeditionBriefing();
         }
         void PrepareExpeditionBriefing()
         {
-            trial=expedition.CreateTrial();phase=JourneyPhase.Briefing;phaseClock=0;
+            trial=expedition.CreateTrial(Difficulty.CodeLength);phase=JourneyPhase.Briefing;phaseClock=0;
             world.SetGuardian(expedition.Boss);world.SetConstellation(trial.Constellation);
         }
         void BeginExpeditionRound()
         {
             if(expedition.Finished||expedition.AwaitingBlessing)return;
             showHint=false;focusTime=0;assisted=false;lastWrong=-1;
-            trial=expedition.CreateTrial();world.SetGuardian(expedition.Boss);PlaySequence();
+            trial=expedition.CreateTrial(Difficulty.CodeLength);world.SetGuardian(expedition.Boss);PlaySequence();
         }
         void SubmitExpedition(int rune)
         {
@@ -67,16 +68,13 @@ namespace EcosDeNebula
             if(rune!=expected)
             {
                 lastWrong=expected;assisted=true;flash=0.3f;Play(errorSound);
-                if(expedition.AbsorbError())
-                {toast="Tu escudo absorbe el error. Responde la misma posición.";toastTime=4;return;}
                 attempt.Submit(rune);
-                if(expedition.Finished){SettleExpedition();phase=JourneyPhase.Ending;}
-                else phase=JourneyPhase.Retry;
-                phaseClock=0;return;
+                FailRun("Código incorrecto: se esperaba la runa "+(expected+1)+". La expedición vuelve al principio.");return;
             }
             attempt.Submit(rune);
             world.SetGuardian(expedition.Boss,1-(float)attempt.Position/trial.Answer.Length);
             if(!attempt.Complete)return;
+            WinCombatWave();
             int bossWorld=expedition.Biome;bool wasBoss=expedition.Boss;
             scoreGain=expedition.Complete(assisted);progress.wins++;
             // Daily rewards are settled only once on completion. Repeat practice remains free.
@@ -94,6 +92,7 @@ namespace EcosDeNebula
         void ChooseBlessing(int choice)
         {
             if(expedition==null||!expedition.Choose((Blessing)choice))return;
+            if(choice==0&&combat!=null)combat.Heal();
             BuildWorld();PrepareExpeditionBriefing();
         }
         void SettleExpedition()
@@ -107,6 +106,7 @@ namespace EcosDeNebula
         void ReturnHome()
         {
             CancelGeneration();if(expedition!=null)SettleExpedition();
+            ClearCombatWave();combat=null;
             SaveJourney();expedition=null;race=null;phase=JourneyPhase.Home;paused=false;showHelp=false;endless=false;panel=0;
             trial=null;dashTime=0;BuildWorld();
         }
@@ -115,10 +115,7 @@ namespace EcosDeNebula
             dashCooldown=Mathf.Max(0,dashCooldown-dt);dashTime=Mathf.Max(0,dashTime-dt);focusTime=Mathf.Max(0,focusTime-dt);
             bool canMove=phase==JourneyPhase.Briefing||phase==JourneyPhase.Watching||phase==JourneyPhase.Answering||phase==JourneyPhase.Retry||phase==JourneyPhase.Success||phase==JourneyPhase.Race&&race!=null&&!race.Finished&&raceCountdown<=0;
             if(canMove&&Input.GetKeyDown(KeyCode.Q)&&dashCooldown<=0)
-            {
-                dashTime=0.25f;dashCooldown=3.5f-(expedition!=null&&expedition.Daily?0:progress.stride*0.65f);
-                progress.dashes++;CheckAchievements();SaveProgress();
-            }
+                PerformDodge();
             world.DashEffect(dashTime>0);
             if(phase==JourneyPhase.Answering&&Input.GetKeyDown(KeyCode.F))RevealNextRune();
             if(focusTime>0&&phase==JourneyPhase.Answering&&attempt.Expected>=0)world.Pulse(attempt.Expected);

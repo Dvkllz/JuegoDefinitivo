@@ -26,9 +26,8 @@ static class ExpeditionTests
             Check(run.Won&&run.Finished,"Six encounters complete");
         }
         var fail=new ExpeditionRun(0,false,0,1);
-        Check(fail.AbsorbError()&&fail.Hearts==3,"Shield protects heart");
-        for(int i=0;i<3;i++)fail.AbsorbError();
-        Check(fail.Finished&&!fail.Won,"Defeat after three errors");
+        fail.Fail();
+        Check(fail.Finished&&!fail.Won,"A pattern error ends the expedition even with a shield");
         Check(fail.Complete(false)==0,"Cannot reward defeated run");
         var daily=new ExpeditionRun(20261024,true,2,2);
         Check(daily.Hearts==3&&daily.Shields==0,"Daily ignores purchased advantages");
