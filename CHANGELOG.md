@@ -1,5 +1,12 @@
 # Ecos de Nébula — La era de los guardianes
 
+## 3 de noviembre de 2026 — Corrección visual del lobby
+
+- Portal reconstruido con dovelas radiales y juntas entre piezas: desaparecen las caras superpuestas del arco y de su unión con los pilares.
+- Paneles del lobby opacos: el archipiélago ya no se transparenta por detrás de títulos, descripciones y controles.
+- Más espacio vertical para las descripciones, evitando líneas recortadas.
+- Aros del pavimento y sellos de los pedestales construidos como superficies horizontales fijas, con alturas separadas. Ya no giran hacia la cámara ni atraviesan el suelo al cambiar el ángulo.
+
 ## 3 de noviembre de 2026 — Runas a pie
 
 - Selección exclusiva por la posición de Luma: entrar en el aro de un cristal introduce una runa.

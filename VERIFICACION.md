@@ -2,6 +2,14 @@
 
 Última revisión: 3 de noviembre de 2026. Equipo Windows, Unity 6000.6.5f1.
 
+## Portal y lobby — 3 de noviembre
+
+- **Compilación y renderizado: PASS.** Unity generó el ejecutable y tres imágenes de los santuarios. Log: `TestResults/Unity-v412-Portal.log`.
+- Se inspeccionaron `Capturas/Santuario-1.png`, `Santuario-2.png` y `Santuario-3.png`: el arco usa dovelas radiales separadas por juntas y no comparte caras superpuestas con los pilares. Los aros del pavimento son mallas horizontales a alturas distintas.
+- Los paneles del lobby tienen fondos opacos y las descripciones disponen de más altura para evitar recortes.
+- Esta corrección es visual; no altera las reglas de selección física, combate ni guardado. No se repitió la batería de lógica ni se llamó a OpenAI.
+- Paquete de esta edición: `Builds/EcosDeNebula-4.1.2-lobby.zip`.
+
 ## Runas a pie — 3 de noviembre
 
 - **Selección física y combate: PASS.** 150 comprobaciones en Unity Play Mode, incluidas 45 nuevas sobre entrada en los aros, permanencia sin duplicados, salida y reentrada para repetir símbolos, margen de salida, bloqueo durante demostración/pausa/ayuda/Atlas y rechazo de respuestas a distancia. Las comprobaciones se repiten en las cinco dificultades. Log: `TestResults/Unity-v41-BuildCombat.log`.
