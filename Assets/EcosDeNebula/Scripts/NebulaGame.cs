@@ -74,6 +74,7 @@ namespace EcosDeNebula
         void Awake()
         {
             Application.targetFrameRate = 60;
+            LoadLanguage();
             muted = PlayerPrefs.GetInt(MuteKey, 0) == 1;
             reducedMotion = PlayerPrefs.GetInt(MotionKey, 0) == 1;
             LoadJourney();
@@ -422,7 +423,7 @@ namespace EcosDeNebula
             uiW = Screen.width/uiScale; uiH=Screen.height/uiScale;
             Matrix4x4 previous=GUI.matrix; GUI.matrix=Matrix4x4.Scale(new Vector3(uiScale,uiScale,1));
             if(textStyle==null) textStyle=new GUIStyle(GUI.skin.label);
-            bool previousEnabled=GUI.enabled;GUI.enabled=previousEnabled&&panel==0;
+            bool previousEnabled=GUI.enabled;GUI.enabled=previousEnabled&&panel==0&&!paused&&!showHelp;
             Header();
             if(phase==JourneyPhase.Home) HomeUI();
             else
@@ -442,6 +443,7 @@ namespace EcosDeNebula
             CombatUI();
             if(toastTime>0 && !paused && !showHelp) { Box(new Rect(uiW/2-270,uiH-238,540,34),ink); Label(new Rect(uiW/2-258,uiH-233,516,24),toast,14,mint,TextAnchor.MiddleCenter); }
             if(flash>0) Box(new Rect(0,0,uiW,uiH),new Color(0.7f,0.25f,0.13f,flash*0.12f));
+            GUI.enabled=previousEnabled;
             if(paused) PauseUI();
             if(showHelp) HelpUI();
             GUI.enabled=previousEnabled;
@@ -458,7 +460,7 @@ namespace EcosDeNebula
             textStyle.font=display?serif:sans;textStyle.fontSize=Mathf.Max(14,size);textStyle.normal.textColor=color;textStyle.alignment=alignment;
             rect.height=Mathf.Max(rect.height,textStyle.fontSize+8);
             textStyle.wordWrap=true;textStyle.richText=false;textStyle.fontStyle=FontStyle.Normal;
-            GUI.Label(rect,value,textStyle);
+            GUI.Label(rect,NebulaLocalization.Text(value),textStyle);
         }
         bool Button(Rect rect,string title,bool primary=false,bool enabled=true)
         {
@@ -482,8 +484,9 @@ namespace EcosDeNebula
             Label(new Rect(94,51,350,18),"UNA AVENTURA DE PATRONES · 3D",10,dim);
             bool canClick=!paused&&!showHelp&&panel==0; bool previous=GUI.enabled;GUI.enabled=previous&&canClick;
             if(Button(new Rect(uiW-365,22,104,40),muted?"Sonido: no":"Sonido: sí")) {muted=!muted;SaveJourney();}
-            if(Button(new Rect(uiW-251,22,105,40),"Cómo jugar")) showHelp=true;
-            if(Button(new Rect(uiW-136,22,100,40),phase==JourneyPhase.Home?"Acerca de":"Pausa  II")) {if(phase==JourneyPhase.Home)showHelp=true;else paused=true;}
+            LanguageSelector(new Rect(uiW-698,22,185,40));
+            if(Button(new Rect(uiW-251,22,105,40),"Cómo jugar")) OpenInformation(false);
+            if(Button(new Rect(uiW-136,22,100,40),phase==JourneyPhase.Home?"Acerca de":"Pausa  II")) {if(phase==JourneyPhase.Home)OpenInformation(true);else paused=true;}
             GUI.enabled=previous;
         }
 
@@ -535,7 +538,7 @@ namespace EcosDeNebula
 
             Box(new Rect(uiW-278,112,248,338),ink);
             Label(new Rect(uiW-257,131,215,20),"EL TEJEDOR · IA",11,mint);
-            Label(new Rect(uiW-257,164,209,71),trial==null?"Estoy listo para escuchar cómo piensas.":trial.Intent,16,paper);
+            Label(new Rect(uiW-257,164,209,71),trial==null?"Estoy listo para escuchar cómo piensas.":TrialText(trial.Intent,"Cada patrón cuenta una historia."),16,paper);
             RuleLine(uiW-257,242,205);
             Label(new Rect(uiW-257,259,205,20),"APRENDIZAJE EN TIEMPO REAL",9,dim);
             float skill=director.Profile.skill;
@@ -545,7 +548,7 @@ namespace EcosDeNebula
             RuleLine(uiW-257,338,205);
             string origin=trial!=null&&trial.GeneratedByApi?"OPENAI · "+trial.Model:apiEnabled?ai.Status:"Modo local elegido";
             Label(new Rect(uiW-257,352,205,33),origin,11,trial!=null&&trial.GeneratedByApi?mint:dim);
-            Label(new Rect(uiW-257,391,205,43),trial==null?"Cada patrón cuenta una historia.":trial.Title,17,paper,TextAnchor.UpperLeft,true);
+            Label(new Rect(uiW-257,391,205,43),trial==null?"Cada patrón cuenta una historia.":TrialText(trial.Title,"Un nuevo eco"),17,paper,TextAnchor.UpperLeft,true);
         }
 
         void BriefingUI()
@@ -590,7 +593,7 @@ namespace EcosDeNebula
                 if(showHint)
                 {
                     Box(new Rect(uiW-278,464,248,105),ink);
-                    Label(new Rect(uiW-257,480,207,78),trial.Hint,15,mint);
+                    Label(new Rect(uiW-257,480,207,78),TrialText(trial.Hint,WorldRules[save.world]),15,mint);
                 }
             }
         }
@@ -644,9 +647,10 @@ namespace EcosDeNebula
         void PauseUI()
         {
             Box(new Rect(0,0,uiW,uiH),new Color(0.015f,0.035f,0.06f,0.78f));
-            float x=uiW/2-250,y=uiH/2-240;
-            Box(new Rect(x,y,500,480),ink);
+            float x=uiW/2-250,y=uiH/2-280;
+            Box(new Rect(x,y,500,560),ink);
             Label(new Rect(x+30,y+30,440,60),phase==JourneyPhase.Home?"Un nuevo comienzo":"Un momento de calma",34,paper,TextAnchor.MiddleCenter,true);
+            LanguageSelector(new Rect(x+40,y+453,420,44));
             if(phase==JourneyPhase.Home)
             {
                 Label(new Rect(x+40,y+121,420,94),"Comenzarás desde el Bosque de Jade con un nuevo aprendizaje. Tu récord se conserva.",20,dim,TextAnchor.MiddleCenter);
@@ -663,22 +667,6 @@ namespace EcosDeNebula
                 if(Button(new Rect(x+40,y+296,420,48),muted?"Activar sonido":"Silenciar sonido")) {muted=!muted;SaveJourney();}
                 if(Button(new Rect(x+40,y+361,420,48),expedition!=null?"Retirarse · conservar recompensas":"Guardar y volver al inicio")) ReturnHome();
             }
-        }
-
-        void HelpUI()
-        {
-            Box(new Rect(0,0,uiW,uiH),new Color(0.015f,0.035f,0.06f,0.85f));
-            float x=uiW/2-380,y=uiH/2-330;
-            Box(new Rect(x,y,760,660),ink);
-            Label(new Rect(x+35,y+27,690,59),"Todo empieza por escuchar.",39,paper,TextAnchor.UpperLeft,true);
-            Label(new Rect(x+36,y+103,680,66),"Cada destello tiene una casilla de respuesta. Introduce el código mientras esquivas y combates. Un código incorrecto o perder toda la vida reinicia el recorrido; conservas nivel, aspectos y memorias.",18,paper);
-            RuleLine(x+36,y+194,688);
-            Label(new Rect(x+36,y+220,320,155),"Entra en un aro: elegir runa\nSal y vuelve: repetir runa\nWASD: mover · Mayús: correr\nR: onda de ataque del bastón\nQ: esquiva con invulnerabilidad\nF: revelar siguiente runa",17,dim);
-            Label(new Rect(x+388,y+220,338,155),"← → o arrastre derecho: cámara\nRueda: acercar o alejar\nEspacio: escuchar de nuevo\nEsc: pausa / cerrar ayuda\nTAB: Atlas y taller\nC: brújula de memorias",17,dim);
-            RuleLine(x+36,y+370,688);
-            Label(new Rect(x+36,y+393,688,27),"OPENAI GENERATIVA + APRENDIZAJE LOCAL",12,mint);
-            Label(new Rect(x+36,y+436,688,104),"Con Jugar-con-IA, OpenAI crea patrones, nombres y pistas a partir de tus estadísticas de runas. El juego valida cada reto. La clave queda en el puente local, nunca en el ejecutable. Si la API falla, sigues jugando en modo local; el panel indica el origen real del patrón. La API puede consumir saldo de tu cuenta.",16,dim);
-            if(Button(new Rect(x+36,y+559,688,55),"Entendido   →",true))showHelp=false;
         }
 
         void OnApplicationPause(bool isPaused) { if(isPaused && save!=null)SaveJourney(); }

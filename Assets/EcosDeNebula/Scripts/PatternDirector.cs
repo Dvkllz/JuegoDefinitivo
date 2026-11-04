@@ -50,6 +50,7 @@ namespace EcosDeNebula
         public string Constellation = "orbit";
         public string Model = "";
         public bool GeneratedByApi;
+        public string TextLanguage = "es";
 
         // Playback contract: each visible flash always has one input slot, regardless of source.
         public void PrepareCode(int length = 0)

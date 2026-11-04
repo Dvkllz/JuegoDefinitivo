@@ -1,0 +1,327 @@
+# Spanish source phrase|English. Preserve spaces; use \n for line breaks.
+Atlas · TAB|Atlas · TAB
+LA ERA DE LOS GUARDIANES|THE AGE OF GUARDIANS
+Un cielo por conquistar|A sky to discover
+6 encuentros · 3 guardianes · bendiciones\nTalentos, aspectos y un nuevo reto cada día.|6 encounters · 3 guardians · blessings\nTalents, outfits and a new challenge each day.
+Entrar en expedición   →|Enter an expedition   →
+Desafío diario|Daily challenge
+Taller y diario|Workshop & journal
+NIVEL\s|LEVEL\s
+ ESENCIA   /\s\s\s| ESSENCE   /\s\s\s
+ LOGROS| ACHIEVEMENTS
+LUMA · NIVEL\s|LUMA · LEVEL\s
+ ESENCIA| ESSENCE
+Q · impulso\s|Q · dash\s
+listo|ready
+\nC · brújula     F · revelar siguiente|\nC · compass     F · reveal next rune
+Atlas de Luma|Luma's Atlas
+Cerrar · Esc|Close · Esc
+Viajes|Journeys
+Taller|Workshop
+Logros|Achievements
+Memorias|Memories
+ ESENCIA   ·\s\s\s| ESSENCE   ·\s\s\s
+ EXPEDICIONES COMPLETADAS| EXPEDITIONS COMPLETED
+GUARDIÁN RECONCILIADO|GUARDIAN RECONCILED
+GUARDIÁN POR DESCUBRIR|UNDISCOVERED GUARDIAN
+Carrera 3D|3D race
+Seis códigos bajo ataque y una bendición entre encuentros. R golpea y desvía proyectiles; Q esquiva. Un código incorrecto o perder toda la vida termina la expedición: vuelves al primer encuentro. La campaña guardada queda separada.|Six codes under attack, with a blessing between encounters. R attacks and deflects projectiles; Q dodges. A wrong code or losing all health ends the expedition: you return to the first encounter. Your campaign save stays separate.
+DIARIO ·\s|DAILY ·\s
+ UTC · Mejor:\s| UTC · Best:\s
+\nSemilla fija local. Talentos desactivados. Bonificación de victoria: una vez al día. Sin clasificación en línea.|\nFixed local seed. Talents disabled. Win bonus: once per day. No online leaderboard.
+Iniciar expedición|Start expedition
+Jugar desafío diario|Play daily challenge
+Campaña y expediciones comparten XP, logros y cosméticos. La IA generativa sigue disponible en la campaña.|Campaign and expeditions share XP, achievements and outfits. Generative AI is available in the campaign.
+Vuelve al inicio para iniciar otro viaje. Este panel pausa el reto actual.|Return home to start another journey. This panel pauses the current challenge.
+Corazón de raíz|Root heart
+Égida de cristal|Crystal aegis
+Paso de brisa|Breeze stride
++1 vida máxima por rango en expediciones normales.|+1 maximum health per rank in regular expeditions.
+Absorbe un golpe enemigo por rango. Nunca protege un código incorrecto.|Absorbs one enemy hit per rank. Never protects against a wrong code.
+Reduce 0,65 s la recarga del impulso de exploración por rango. En combate: 1,8 s.|Reduces exploration dash cooldown by 0.65 s per rank. In combat: 1.8 s.
+RANGO\s|RANK\s
+Completado|Completed
+Mejorar ·\s|Upgrade ·\s
+ esencia| essence
+VESTUARIO · Los aspectos se desbloquean jugando y no se consumen.|OUTFITS · Unlock outfits by playing. They are never consumed.
+Jade · inicial|Jade · starter
+Ámbar · nivel 3|Amber · level 3
+Glacial · un guardián|Glacial · one guardian
+Astral · una expedición|Astral · one expedition
+Bloqueado|Locked
+Equipado|Equipped
+Equipar|Equip
+Termina el recorrido antes de comprar talentos. Los aspectos se pueden cambiar siempre.|Finish the run before buying talents. Outfits can be changed anytime.
+Los talentos y aspectos permanecen al comenzar una nueva campaña.|Talents and outfits carry over into a new campaign.
+ · Obtenido| · Earned
+ · +30 XP / +15 esencia| · +30 XP / +15 essence
+La primera semilla|The first seed
+El nombre de Pip|Pip's name
+Un bosque sin olvido|A forest that remembers
+La promesa de Cérvix|Cérvix's promise
+El mar detenido|The frozen sea
+La brújula rota|The broken compass
+Las velas del ayer|Yesterday's sails
+El reloj de Nácar|Nácar's clock
+La estrella ausente|The missing star
+Cartas del Tejedor|Letters from the Weaver
+La capa de Luma|Luma's cloak
+El secreto de Véspera|Véspera's secret
+Antes de que existieran las islas, una niña guardó cuatro notas en una semilla. Cada árbol de Jade nació de una de ellas.|Before the islands existed, a girl hid four notes inside a seed. Every tree in Jade grew from one of them.
+Pip no era una estrella pequeña. Era una luciérnaga que se negó a abandonar la noche. Ahora encuentra el camino junto a Luma.|Pip was not a tiny star. Pip was a firefly who refused to abandon the night. Now Pip finds the way alongside Luma.
+Los árboles no recuerdan palabras. Recuerdan el orden de la lluvia, del sol y del silencio. Por eso sus canciones son patrones.|Trees do not remember words. They remember the order of rain, sunlight and silence. That is why their songs are patterns.
+Cérvix prometió que ninguna canción se repetiría sin cambiar. Su corona hace avanzar cada nota un paso en el círculo.|Cérvix promised that no song would repeat unchanged. His crown moves every note one step around the circle.
+Una ola quedó suspendida cuando el cielo perdió la memoria. Las velas de ámbar son sus gotas: todavía esperan llegar a la orilla.|A wave froze in the air when the sky lost its memory. The amber sails are its droplets, still waiting to reach the shore.
+La brújula no apunta al norte. Apunta a lo que falta. Luma la reparó dejando de buscar respuestas y empezando a escuchar.|The compass does not point north. It points to what is missing. Luma repaired it by letting go of answers and learning to listen.
+Las navegantes de Ámbar aprendieron a cantar desde el final. Así encontraban el camino a casa incluso cuando el tiempo retrocedía.|The sailors of Amber learned to sing from the end. That was how they found their way home even when time ran backwards.
+Nácar no custodia horas. Custodia despedidas. Para cruzar su reloj debes volver atrás y dar después un paso nuevo.|Nácar does not guard hours. He guards farewells. To cross his clock, you must go backwards and then take a new step.
+En el observatorio hay un lugar vacío. No es una estrella perdida: es el lugar reservado para la historia que todavía escribirás.|There is an empty place in the observatory. It is not a lost star: it is the space reserved for the story you have yet to write.
+El Tejedor anotaba cada error como si fuera un mapa. No buscaba una guardiana perfecta. Buscaba a alguien que no dejara de aprender.|The Weaver recorded every mistake as if it were a map. He did not seek a perfect guardian. He sought someone who would never stop learning.
+La capa de Luma cambia de color con sus viajes. Jade por escuchar, ámbar por crecer, hielo por resistir y violeta por volver.|Luma's cloak changes colour with her travels. Jade for listening, amber for growing, ice for enduring and violet for returning.
+Véspera aprendió que una sombra no es lo contrario de la luz. Es su compañera. Sus runas opuestas sólo cuentan la otra mitad de la canción.|Véspera learned that a shadow is not the opposite of light. It is its companion. Her opposite runes tell the other half of the song.
+Memoria por encontrar|Undiscovered memory
+Un recuerdo espera|A memory awaits
+Busca los cuatro fragmentos dorados en este santuario. Mantén C mientras caminas para que la brújula señale el más cercano. Puedes encontrarlos en campaña o en expediciones.|Find the four golden fragments in this sanctuary. Hold C while walking to point the compass towards the closest one. Find them in the campaign or in expeditions.
+ / 12 MEMORIAS RECUPERADAS| / 12 MEMORIES RECOVERED
+DESAFÍO DIARIO · LOCAL|DAILY CHALLENGE · LOCAL
+EXPEDICIÓN · LOCAL|EXPEDITION · LOCAL
+ENCUENTROS\s\s\s|ENCOUNTERS\s\s\s
+UN CÓDIGO INCORRECTO\nREINICIA LA EXPEDICIÓN|A WRONG CODE\nRESTARTS THE EXPEDITION
+RACHA\s\s\s|STREAK\s\s\s
+   /   FORTUNA\s\s\s|   /   FORTUNE\s\s\s
+Reglas locales verificadas.\nNo usa ni consume la API.|Verified local rules.\nDoes not use the API.
+ENCUENTRO\s|ENCOUNTER\s
+GUARDIÁN|GUARDIAN
+SENDERO|PATH
+Escuchar y afrontar el encuentro|Listen and begin the encounter
+El vínculo se fortalece|The bond grows stronger
+El eco pide otra oportunidad|The echo asks for another chance
+ puntos de expedición.\s| expedition points.\s
+Completado con ayuda.|Completed with help.
+Resuelto sin ayuda.|Solved without help.
+Se esperaba\s|Expected\s
+. Quedan\s|. Remaining:\s
+ corazones. La secuencia no cambia al reintentar.| hearts. The sequence stays the same when retrying.
+Contemplar el nuevo cielo|Look upon the new sky
+Elegir una bendición|Choose a blessing
+Escuchar y reintentar|Listen and retry
+Elige qué llevar al siguiente encuentro|Choose a gift for the next encounter
+Refugio|Shelter
+Paciencia|Patience
+Fortuna|Fortune
+Recupera una vida.\nHasta tu vida máxima.|Recover one health point.\nUp to your maximum health.
+Escucha más despacio.\n+0,15 s por nota.|Listen at a slower pace.\n+0.15 s per note.
+Cada encuentro otorga\n50 puntos adicionales.|Each encounter grants\n50 extra points.
+Elegir|Choose
+DESAFÍO DIARIO FINALIZADO|DAILY CHALLENGE COMPLETE
+FIN DE LA EXPEDICIÓN|EXPEDITION COMPLETE
+Los guardianes\nrecuerdan tu nombre.|The guardians\nremember your name.
+Toda travesía\ndeja una luz.|Every journey\nleaves a light.
+ puntos ·\s| points ·\s
+ / 6 encuentros| / 6 encounters
+Tus talentos, memorias y recompensas permanecen.\nLa campaña sigue exactamente donde la dejaste.\nVisita el taller para preparar tu próxima travesía.|Your talents, memories and rewards remain.\nThe campaign is right where you left it.\nVisit the workshop to prepare your next journey.
+Volver al inicio|Return home
+Te quedaste sin vida frente a los enemigos.|You lost all your health fighting the enemies.
+DIFICULTAD ·\s|DIFFICULTY ·\s
+ runas ·\s| runes ·\s
+ vida · hasta\s| health · up to\s
+ enemigos\nUn código incorrecto reinicia el recorrido.\nEl diario fija la dificultad en Guardián.| enemies\nA wrong code restarts the run.\nDaily challenges use Guardian difficulty.
+ · VIDA\s| · HEALTH\s
+Escudos\s|Shields\s
+ · Enemigos\s| · Enemies\s
+ · Bajas\s| · Kills\s
+R · Atacar|R · Attack
+Q · Esquivar|Q · Dodge
+DESCIFRA + SOBREVIVE   ·   ROJO = ATAQUE INMINENTE|DECODE + SURVIVE   ·   RED = INCOMING ATTACK
+RECORRIDO REINICIADO|RUN RESTARTED
+De vuelta al primer santuario|Back to the first sanctuary
+No hay reintento del mismo código.\nConservas niveles, talentos, aspectos, memorias y récords.|You cannot retry the same code.\nYou keep levels, talents, outfits, memories and records.
+Recomenzar desde el inicio|Restart from the beginning
+Volver al menú y elegir dificultad|Return to menu and choose difficulty
+HOJA|LEAF
+SOL|SUN
+MAREA|TIDE
+ESTRELLA|STAR
+Bosque de Jade|Jade Forest
+Mar de Ámbar|Amber Sea
+Observatorio Violeta|Violet Observatory
+Donde los árboles recuerdan|Where the trees remember
+El tiempo fluye en dos sentidos|Time flows both ways
+El cielo todavía está por escribir|The sky is yet to be written
+Repite el código completo en el mismo orden.|Repeat the full code in the same order.
+Repite el código completo en orden inverso.|Repeat the full code in reverse order.
+Repite TODO el código, incluidas sus repeticiones.|Repeat the ENTIRE code, including every repetition.
+El Bosque de Jade ha olvidado su canción. Escucha los cristales y devuelve sus ecos al corazón del santuario.|The Jade Forest has forgotten its song. Listen to the crystals and return their echoes to the sanctuary's heart.
+El Mar de Ámbar guarda recuerdos al revés. Aquí, el último eco que escuchas debe ser el primero que devuelvas.|The Amber Sea keeps its memories backwards. Here, the last echo you hear must be the first you return.
+Las estrellas hablan con patrones. Devuelve el código completo: cada destello corresponde a una respuesta, también si se repite.|The stars speak in patterns. Return the full code: every flash needs one answer, including repeated flashes.
+ destellos y el mismo número de respuestas. Prepárate para esquivar al responder.| flashes and just as many answers. Be ready to dodge while answering.
+El canto de las hojas|The song of the leaves
+Memorias a contraluz|Backlit memories
+La danza de las estrellas|The dance of the stars
+Repite el código completo, incluidas todas sus repeticiones.|Repeat the full code, including every repetition.
+Escucha otra vez. La ayuda no impide avanzar.|Listen again. Help does not prevent progress.
+Código incorrecto: se esperaba la runa\s|Wrong code: expected rune\s
+Fragmento de memoria encontrado · +40 destellos|Memory fragment found · +40 sparks
+ECOS DE NÉBULA|ECHOES OF NEBULA
+UNA AVENTURA DE PATRONES · 3D|A 3D PATTERN ADVENTURE
+Sonido: no|Sound: off
+Sonido: sí|Sound: on
+Cómo jugar|How to play
+Acerca de|About
+Pausa  II|Pause  II
+01 / EL ARCHIPIÉLAGO DE LOS ECOS|01 / THE ARCHIPELAGO OF ECHOES
+El mundo tiene\nun patrón.|The world has\na pattern.
+Encuéntralo. Despierta sus islas.\nUna inteligencia que aprende de ti\nteje cada nuevo desafío.|Find it. Awaken its islands.\nAn intelligence that learns from you\nweaves each new challenge.
+Descifra los códigos. Esquiva y combate. Un error te devuelve al primer santuario.|Decode the patterns. Dodge and fight. One mistake sends you back to the first sanctuary.
+Continuar mi viaje   →|Continue my journey   →
+Despertar el primer eco   →|Awaken the first echo   →
+ destellos| sparks
+Nueva aventura|New adventure
+Elige una de cinco dificultades.\nTu nivel y tus aspectos permanecen al caer.|Choose from five difficulties.\nKeep your level and outfits when you fall.
+3 SANTUARIOS    /    9 SELLOS    /\s\s\s\s|3 SANCTUARIES    /    9 SEALS    /\s\s\s\s
+MODO LOCAL|LOCAL MODE
+EL TEJEDOR|THE WEAVER
+«Cada intento me enseña\na crear tu próximo desafío.»|“Each attempt teaches me\nto create your next challenge.”
+MODO CONSTELACIÓN|CONSTELLATION MODE
+SANTUARIO\s|SANCTUARY\s
+Ecos sin fin|Endless echoes
+SELLOS RESTAURADOS|SEALS RESTORED
+DESTELLOS|SPARKS
+RACHA|STREAK
+MEMORIAS OCULTAS\s\s\s|HIDDEN MEMORIES\s\s\s
+EL TEJEDOR · IA|THE WEAVER · AI
+Estoy listo para escuchar cómo piensas.|I am ready to hear how you think.
+APRENDIZAJE EN TIEMPO REAL|REAL-TIME LEARNING
+Afinidad\s|Affinity\s
+ intentos| attempts
+Modo local elegido|Local mode selected
+Cada patrón cuenta una historia.|Every pattern tells a story.
+Escucha. Recuerda. Responde.|Listen. Remember. Respond.
+El final es el principio.|The end is the beginning.
+Imagina el siguiente eco.|Imagine the next echo.
+Camina al aro de cada cristal.\nSal del aro para repetir una runa.|Walk into each crystal's ring.\nLeave the ring to repeat a rune.
+Escuchar el patrón   →|Listen to the pattern   →
+ESCUCHA EL PATRÓN|LISTEN TO THE PATTERN
+TU TURNO  /\s\s|YOUR TURN  /\s\s
+ destellos =\s| flashes =\s
+ respuestas. Los enemigos entran al responder.| answers. Enemies arrive when you respond.
+Entra en los aros con Luma · WASD mover · Q esquivar · R atacar|Enter the rings with Luma · WASD move · Q dodge · R attack
+Volver a escuchar|Listen again
+PAUSA|PAUSE
+RUNA\s|RUNE\s
+Sal del círculo exterior antes de volver a elegir esa runa.|Leave the outer circle before choosing that rune again.
+Cada entrada en un aro elige una runa. Planea tu recorrido.|Entering a ring chooses one rune. Plan your route.
+Ocultar pista|Hide hint
+Pedir una pista|Ask for a hint
+El Tejedor imagina tu próximo eco|The Weaver imagines your next echo
+OpenAI está creando el patrón y una pista para ti. Puedes continuar con un reto local en cualquier momento.|OpenAI is creating a pattern and a hint for you. You can switch to a local challenge at any time.
+Continuar ahora con un patrón local|Continue now with a local pattern
+EL SANTUARIO TE RECUERDA|THE SANCTUARY REMEMBERS YOU
+EL ECO SE DESVANECIÓ|THE ECHO FADED
+Un poco más de luz.|A little more light.
+Volvamos a escucharlo.|Let's listen again.
+ destellos  ·\s\s| sparks  ·\s\s
+Sello restaurado con ayuda.|Seal restored with help.
+El Tejedor ha aprendido de tu respuesta.|The Weaver has learned from your answer.
+. No pierdes sellos; puedes intentarlo de nuevo.|. You keep your seals; you can try again.
+Completar santuario   →|Complete sanctuary   →
+Tejer el siguiente patrón   →|Weave the next pattern   →
+Escuchar y reintentar   →|Listen and retry   →
+TRES SELLOS · UN MUNDO DESPIERTO|THREE SEALS · A WORLD AWAKENED
+El portal está abierto.|The portal is open.
+Luma ha devuelto la memoria a\s|Luma has restored the memory of\s
+. El siguiente santuario guarda una nueva regla.|. The next sanctuary holds a new rule.
+Viajar a\s|Travel to\s
+LOS NUEVE SELLOS HAN DESPERTADO|ALL NINE SEALS HAVE AWAKENED
+El cielo vuelve\na recordar.|The sky\nremembers again.
+Luma aprendió a escuchar. El Tejedor aprendió de Luma.\nY juntos encontraron un patrón nuevo: seguir intentándolo.|Luma learned to listen. The Weaver learned from Luma.\nTogether they found a new pattern: keep trying.
+Seguir explorando · modo Constelación|Keep exploring · Constellation mode
+Un nuevo comienzo|A new beginning
+Un momento de calma|A moment of calm
+Comenzarás desde el Bosque de Jade con un nuevo aprendizaje. Tu récord se conserva.|You will restart in the Jade Forest with fresh learning. Your best score is kept.
+Comenzar de nuevo|Start again
+Conservar mi viaje|Keep my journey
+Actividad local · no consume API|Local activity · no API use
+Generación API: activada|API generation: on
+Generación API: desactivada|API generation: off
+Continuar|Resume
+Movimiento reducido: sí|Reduced motion: on
+Movimiento reducido: no|Reduced motion: off
+Activar sonido|Enable sound
+Silenciar sonido|Mute sound
+Retirarse · conservar recompensas|Retire · keep rewards
+Guardar y volver al inicio|Save and return home
+Entendido   →|Got it   →
+Primer despertar|First awakening
+Aprendiz de ecos|Echo apprentice
+Tejedora constante|Steady weaver
+Sin una grieta|Without a crack
+Coleccionista|Collector
+El archivo completo|The complete archive
+Vigía del bosque|Forest watcher
+Relojera del mar|Sea clockmaker
+Cartógrafa celeste|Celestial cartographer
+El archipiélago unido|The united archipelago
+Viajera del viento|Wind traveller
+Afinidad estelar|Stellar affinity
+Resuelve un reto.|Solve a challenge.
+Resuelve 5 retos.|Solve 5 challenges.
+Resuelve 20 retos.|Solve 20 challenges.
+Consigue 3 sellos perfectos.|Earn 3 perfect seals.
+Encuentra 4 memorias.|Find 4 memories.
+Encuentra las 12 memorias.|Find all 12 memories.
+Vence a Cérvix.|Defeat Cérvix.
+Vence a Nácar.|Defeat Nácar.
+Vence a Véspera.|Defeat Véspera.
+Completa una expedición.|Complete an expedition.
+Usa el impulso 20 veces.|Dash 20 times.
+Alcanza el nivel 5.|Reach level 5.
+Logro:\s|Achievement:\s
+ · +15 esencia| · +15 essence
+. La expedición vuelve al principio.|. The expedition restarts from the beginning.
+Concentración · siguiente runa:\s|Focus · next rune:\s
+ · recompensa con ayuda| · assisted reward
+CARRERA DE LUCIÉRNAGAS|FIREFLY RACE
+ BALIZAS| BEACONS
+ORO ≤ 26 s   /   PLATA ≤ 42 s\nBRONCE · completar|GOLD ≤ 26 s   /   SILVER ≤ 42 s\nBRONZE · finish
+Prepárate…\s|Get ready…\s
+Alcanza la siguiente baliza dorada|Reach the next golden beacon
+WASD · caminar   /   Mayús · correr   /   Q · impulso\nMantén C para señalar la baliza. Recoge las doce antes de que termine el tiempo.|WASD · walk   /   Shift · run   /   Q · dash\nHold C to point to the beacon. Collect all twelve before time runs out.
+ORO|GOLD
+PLATA|SILVER
+BRONCE|BRONZE
+ segundos| seconds
+El tiempo terminó. Puedes volver a intentarlo.|Time is up. You can try again.
+Volver al atlas|Return to Atlas
+Cérvix, raíz de cristal|Cérvix, crystal root
+Nácar, reloj del mar|Nácar, sea clock
+Véspera, ojo del cielo|Véspera, eye of the sky
+Repite la secuencia en el mismo orden.|Repeat the sequence in the same order.
+Sube cada runa un lugar: 1→2, 2→3, 3→4, 4→1.|Move each rune up one: 1→2, 2→3, 3→4, 4→1.
+Devuelve la secuencia desde el final al principio.|Return the sequence from last to first.
+Invierte el orden y luego sube cada runa un lugar.|Reverse the order, then move each rune up one.
+Repite el código completo, incluidas sus repeticiones.|Repeat the full code, including its repetitions.
+Cambia cada runa por su opuesta: 1↔4 y 2↔3. Conserva el orden.|Swap each rune for its opposite: 1↔4 and 2↔3. Keep the order.
+Sendero\s|Path\s
+El guardián transforma los ecos. Lee su regla antes de responder.|The guardian transforms the echoes. Read the rule before answering.
+Un encuentro del archipiélago. Tu campaña permanece a salvo.|An encounter in the archipelago. Your campaign stays safe.
+Aprendiz|Apprentice
+Explorador|Explorer
+Guardián|Guardian
+Maestro|Master
+Pesadilla|Nightmare
+Un nuevo eco|A new echo
+Escucha la regla de este santuario y agrupa los ecos.|Listen to this sanctuary's rule and group the echoes.
+Estoy descubriendo tu ritmo. Empezamos con tres ecos.|I am discovering your rhythm. We begin with three echoes.
+Has encadenado aciertos. Aumentaré el desafío poco a poco.|You have built a streak. I will increase the challenge gradually.
+Reforzaré tu runa menos segura y adaptaré el ritmo a tus respuestas.|I will practise your least confident rune and adapt the pace to your answers.
+Modo local|Local mode
+API configurada|API configured
+El Tejedor está creando...|The Weaver is creating...
+Generado por OpenAI|Generated by OpenAI
+Respuesta inválida · modo local|Invalid response · local mode
+Cuota o límite API · modo local|API quota or rate limit · local mode
+Clave no disponible · modo local|Key unavailable · local mode
+Límite de sesión · modo local|Session limit · local mode
+API en espera · modo local|API cooldown · local mode
+API no disponible · modo local|API unavailable · local mode

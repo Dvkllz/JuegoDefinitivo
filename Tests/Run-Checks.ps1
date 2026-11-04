@@ -8,6 +8,10 @@ $nebulaCompiler = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 Push-Location $nebulaRoot
 try {
     New-Item -ItemType Directory -Force -Path 'TestResults' | Out-Null
+    & $nebulaCompiler /nologo /out:TestResults\LocalizationTests.exe Assets\EcosDeNebula\Scripts\NebulaLocalization.cs Tests\LocalizationTests.cs
+    if ($LASTEXITCODE -ne 0) { throw 'No se pudo compilar la prueba de idiomas.' }
+    & .\TestResults\LocalizationTests.exe
+    if ($LASTEXITCODE -ne 0) { throw 'Fallaron las pruebas de idiomas.' }
     & $nebulaCompiler /nologo /out:TestResults\PatternDirectorTests.exe Assets\EcosDeNebula\Scripts\PatternDirector.cs Tests\PatternDirectorTests.cs
     if ($LASTEXITCODE -ne 0) { throw 'No se pudo compilar la prueba de patrones.' }
     & .\TestResults\PatternDirectorTests.exe
