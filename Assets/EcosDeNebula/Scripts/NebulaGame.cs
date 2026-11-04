@@ -36,6 +36,7 @@ namespace EcosDeNebula
             "Las estrellas hablan con patrones. Devuelve el código completo: cada destello corresponde a una respuesta, también si se repite."
         };
         readonly Color ink = new Color(0.045f, 0.085f, 0.12f, 0.96f);
+        readonly Color lobbyInk = new Color(0.045f, 0.085f, 0.12f, 1f);
         readonly Color paper = new Color(0.88f, 0.94f, 0.90f);
         readonly Color dim = new Color(0.68f, 0.78f, 0.81f);
         readonly Color mint = new Color(0.65f, 0.91f, 0.75f);
@@ -481,7 +482,7 @@ namespace EcosDeNebula
 
         void Header()
         {
-            Box(new Rect(0,0,uiW,86),new Color(0.035f,0.065f,0.10f,0.88f));
+            Box(new Rect(0,0,uiW,86),new Color(0.035f,0.065f,0.10f,phase==JourneyPhase.Home?1f:0.88f));
             Label(new Rect(38,22,45,40),"✧",31,mint,TextAnchor.MiddleCenter);
             Label(new Rect(92,22,310,27),"ECOS DE NÉBULA",21,paper);
             Label(new Rect(94,51,350,18),"UNA AVENTURA DE PATRONES · 3D",10,dim);
@@ -495,12 +496,12 @@ namespace EcosDeNebula
         void HomeUI()
         {
             bool previous=GUI.enabled;GUI.enabled=previous&&!showHelp&&!paused;
-            Box(new Rect(0,86,580,uiH-86),new Color(0.035f,0.075f,0.105f,0.87f));
+            Box(new Rect(0,86,580,uiH-86),new Color(0.035f,0.075f,0.105f,1f));
             Label(new Rect(72,145,450,24),"01 / EL ARCHIPIÉLAGO DE LOS ECOS",12,mint);
             Label(new Rect(66,194,485,185),"El mundo tiene\nun patrón.",66,paper,TextAnchor.UpperLeft,true);
-            Label(new Rect(72,389,434,81),"Encuéntralo. Despierta sus islas.\nUna inteligencia que aprende de ti\nteje cada nuevo desafío.",21,new Color(0.67f,0.79f,0.78f));
+            Label(new Rect(72,389,434,104),"Encuéntralo. Despierta sus islas.\nUna inteligencia que aprende de ti\nteje cada nuevo desafío.",21,new Color(0.67f,0.79f,0.78f));
             RuleLine(74,500,425);
-            Label(new Rect(74,523,416,54),"Descifra los códigos. Esquiva y combate. Un error te devuelve al primer santuario.",17,paper);
+            Label(new Rect(74,523,416,70),"Descifra los códigos. Esquiva y combate. Un error te devuelve al primer santuario.",17,paper);
             bool resume=hasSave&&(save.score>0||save.learning.trials>0||save.completed);
             if(Button(new Rect(74,608,424,61),resume?"Continuar mi viaje   →":"Despertar el primer eco   →",true)) StartJourney(false);
             if(resume)
@@ -510,7 +511,7 @@ namespace EcosDeNebula
             }
             else Label(new Rect(74,689,435,42),"Elige una de cinco dificultades.\nTu nivel y tus aspectos permanecen al caer.",14,dim);
             Label(new Rect(74,uiH-68,460,28),"3 SANTUARIOS    /    9 SELLOS    /    "+(ai.Configured?"OPENAI + LOCAL":"MODO LOCAL"),11,mint);
-            Box(new Rect(uiW-406,uiH-153,360,105),ink);
+            Box(new Rect(uiW-406,uiH-153,360,105),lobbyInk);
             Label(new Rect(uiW-385,uiH-137,319,21),"EL TEJEDOR",12,mint);
             Label(new Rect(uiW-385,uiH-109,319,46),"«Cada intento me enseña\na crear tu próximo desafío.»",18,paper,TextAnchor.UpperLeft,true);
             GUI.enabled=previous;

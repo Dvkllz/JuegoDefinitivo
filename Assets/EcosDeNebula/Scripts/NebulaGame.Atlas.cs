@@ -12,14 +12,14 @@ namespace EcosDeNebula
             if(phase==JourneyPhase.Home)
             {
                 float x=uiW-474;
-                Box(new Rect(x,130,426,315),ink);
+                Box(new Rect(x,130,426,315),lobbyInk);
                 Label(new Rect(x+26,151,375,24),"LA ERA DE LOS GUARDIANES",12,mint);
                 Label(new Rect(x+25,187,376,49),"Un cielo por conquistar",29,paper,TextAnchor.UpperLeft,true);
                 Label(new Rect(x+26,246,375,55),"6 encuentros · 3 guardianes · bendiciones\nTalentos, aspectos y un nuevo reto cada día.",16,dim);
                 if(Button(new Rect(x+26,321,374,48),"Entrar en expedición   →",true,active))StartExpedition(false);
                 if(Button(new Rect(x+26,382,180,40),"Desafío diario",false,active))StartExpedition(true);
                 if(Button(new Rect(x+218,382,182,40),"Taller y diario",false,active))panel=2;
-                Box(new Rect(x,461,426,68),ink);
+                Box(new Rect(x,461,426,68),lobbyInk);
                 Label(new Rect(x+25,479,380,34),"NIVEL "+progress.Level+"   /   "+progress.dust+" ESENCIA   /   "+BitCount(progress.achievements)+" LOGROS",12,mint);
             }
             else if(phase!=JourneyPhase.Ending&&phase!=JourneyPhase.Defeat)

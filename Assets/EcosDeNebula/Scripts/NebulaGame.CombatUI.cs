@@ -9,7 +9,7 @@ namespace EcosDeNebula
             if(phase==JourneyPhase.Home)
             {
                 float x=uiW-474;
-                Box(new Rect(x,547,426,181),ink);
+                Box(new Rect(x,547,426,181),lobbyInk);
                 Label(new Rect(x+22,561,382,25),"DIFICULTAD · "+Difficulty.Name.ToUpperInvariant(),16,mint);
                 for(int i=0;i<5;i++)
                     if(Button(new Rect(x+22+i*77,599,68,34),(i+1).ToString(),difficulty==i,!paused&&!showHelp))
