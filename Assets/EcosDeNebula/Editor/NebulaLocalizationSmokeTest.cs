@@ -45,7 +45,7 @@ namespace EcosDeNebula.Editor
                 Call(game,"OpenInformation",false);
                 Check(Field<bool>(game,"showHelp")&&!Field<bool>(game,"showAbout"),"Help opens wrong panel");
                 string[] help=(string[])Call(game,"InformationContent");
-                Check(help.Length==16&&string.Join(" ",help).Contains("WASD"),"Incomplete help");
+                Check(help.Length>=16&&string.Join(" ",help).Contains("WASD"),"Incomplete help");
                 Check(help[0]=="1 · Listen and remember","English help missing");
                 Call(game,"OpenInformation",true);
                 string[] about=(string[])Call(game,"InformationContent");

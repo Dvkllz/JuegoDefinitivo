@@ -441,7 +441,7 @@ namespace EcosDeNebula
             }
             ExpansionUI();
             CombatUI();
-            if(toastTime>0 && !paused && !showHelp) { Box(new Rect(uiW/2-270,uiH-238,540,34),ink); Label(new Rect(uiW/2-258,uiH-233,516,24),toast,14,mint,TextAnchor.MiddleCenter); }
+            if(toastTime>0 && !paused && !showHelp && panel==0) ToastUI();
             if(flash>0) Box(new Rect(0,0,uiW,uiH),new Color(0.7f,0.25f,0.13f,flash*0.12f));
             GUI.enabled=previousEnabled;
             if(paused) PauseUI();
@@ -454,6 +454,21 @@ namespace EcosDeNebula
         void Box(Rect rect,Color color)
         {
             Color old=GUI.color;GUI.color=color;GUI.DrawTexture(rect,Texture2D.whiteTexture);GUI.color=old;
+        }
+        void ToastUI()
+        {
+            string message=NebulaLocalization.Text(toast);
+            GUIStyle style=InformationStyle(16,mint);
+            style.alignment=TextAnchor.MiddleCenter;
+            const float width=640,padding=14;
+            float height=Mathf.Max(38,style.CalcHeight(new GUIContent(message),width-padding*2)+20);
+            // Reserve a separate row above the result panel (campaign and expedition).
+            // During input, stay above the crystal-entry instructions as well.
+            float bottom=phase==JourneyPhase.Success||phase==JourneyPhase.Retry?uiH-296:
+                phase==JourneyPhase.Watching||phase==JourneyPhase.Answering?uiH-268:uiH-246;
+            Rect bounds=new Rect(uiW/2-width/2,bottom-height,width,height);
+            Box(bounds,ink);
+            GUI.Label(new Rect(bounds.x+padding,bounds.y+10,width-padding*2,height-20),message,style);
         }
         void Label(Rect rect,string value,int size,Color color,TextAnchor alignment=TextAnchor.UpperLeft,bool display=false)
         {
