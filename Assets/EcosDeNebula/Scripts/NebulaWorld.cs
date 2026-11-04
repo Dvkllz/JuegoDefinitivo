@@ -103,6 +103,35 @@ namespace EcosDeNebula
             return go.transform;
         }
 
+        void ArchStone(int index, int count, Material material)
+        {
+            // Extruded annular sectors meet along radial joints. Rectangular blocks
+            // overlap on the inner curve and make their coplanar front faces flicker.
+            const float inner=1.99f, outer=2.61f, spring=2.02f, halfDepth=0.4f, joint=0.006f;
+            float a=index*Mathf.PI/count+(index==0?0:joint);
+            float b=(index+1)*Mathf.PI/count-(index==count-1?0:joint);
+            Vector3[] corners=new Vector3[8];
+            corners[0]=new Vector3(Mathf.Cos(a)*inner,spring+Mathf.Sin(a)*inner,-halfDepth);
+            corners[1]=new Vector3(Mathf.Cos(a)*outer,spring+Mathf.Sin(a)*outer,-halfDepth);
+            corners[2]=new Vector3(Mathf.Cos(b)*outer,spring+Mathf.Sin(b)*outer,-halfDepth);
+            corners[3]=new Vector3(Mathf.Cos(b)*inner,spring+Mathf.Sin(b)*inner,-halfDepth);
+            for(int i=0;i<4;i++)corners[i+4]=corners[i]+Vector3.forward*(halfDepth*2);
+            var faces=new List<int>{0,2,1,0,3,2,4,5,6,4,6,7};
+            for(int i=0;i<4;i++)
+            {
+                int next=(i+1)%4;
+                faces.AddRange(new[]{i,next,next+4,i,next+4,i+4});
+            }
+            var vertices=new List<Vector3>();var triangles=new List<int>();
+            foreach(int corner in faces){triangles.Add(vertices.Count);vertices.Add(corners[corner]);}
+            var mesh=new Mesh{name="Dovela radial "+(index+1)};
+            mesh.SetVertices(vertices);mesh.SetTriangles(triangles,0);mesh.RecalculateNormals();mesh.RecalculateBounds();meshes.Add(mesh);
+            var stone=new GameObject(mesh.name,typeof(MeshFilter),typeof(MeshRenderer));
+            stone.transform.SetParent(Portal,false);
+            stone.GetComponent<MeshFilter>().sharedMesh=mesh;
+            stone.GetComponent<MeshRenderer>().sharedMaterial=material;
+        }
+
         Transform FloorRing(string label, Vector3 position, float radius, float width, Material material)
         {
             // A fixed horizontal mesh stays above the pavement at every camera angle.
@@ -193,16 +222,11 @@ namespace EcosDeNebula
                 orbital.rotation=Quaternion.Euler(35+i*35,20+i*60,15);
                 orbitals.Add(orbital);
             }
-            // The portal is an actual 3D arch, built from individual stone voussoirs.
+            // Radial stones and a small spring-line joint keep every visible face separate.
             Portal=new GameObject("Puerta entre santuarios").transform;Portal.SetParent(transform,false);Portal.localPosition=new Vector3(0,0,7);
-            for(int i=0;i<13;i++)
-            {
-                float a=i*Mathf.PI/12;
-                var block=Shape(PrimitiveType.Cube,"Dovela",new Vector3(Mathf.Cos(a)*2.3f,2.1f+Mathf.Sin(a)*2.3f,0),new Vector3(0.64f,0.61f,0.8f),i%3==0?gold:edge,Portal);
-                block.transform.localRotation=Quaternion.Euler(0,0,a*Mathf.Rad2Deg);
-            }
-            Shape(PrimitiveType.Cube,"Pilar izquierdo",new Vector3(-2.3f,1,0),new Vector3(0.58f,2,0.8f),edge,Portal);
-            Shape(PrimitiveType.Cube,"Pilar derecho",new Vector3(2.3f,1,0),new Vector3(0.58f,2,0.8f),edge,Portal);
+            for(int i=0;i<13;i++)ArchStone(i,13,i%3==0?gold:edge);
+            Shape(PrimitiveType.Cube,"Pilar izquierdo",new Vector3(-2.3f,1,0),new Vector3(0.62f,2,0.8f),edge,Portal);
+            Shape(PrimitiveType.Cube,"Pilar derecho",new Vector3(2.3f,1,0),new Vector3(0.62f,2,0.8f),edge,Portal);
             Transform gateRing=Ring("Umbral luminoso",new Vector3(0,2,0),1.85f,0.055f,lineMat,Portal);gateRing.localRotation=Quaternion.Euler(90,0,0);
 
             for(int side=-1;side<=1;side+=2)
