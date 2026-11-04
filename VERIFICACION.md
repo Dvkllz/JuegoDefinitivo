@@ -2,6 +2,15 @@
 
 Última revisión: 4 de noviembre de 2026. Equipo Windows, Unity 6000.6.5f1.
 
+## OpenAI real — 4 de noviembre
+
+- **Generación real: PASS.** `Server/live-check.mjs` recibió un patrón de OpenAI usando `gpt-4.1-mini`: «Susurros del Jade», motivo `[1,2,1]` (runas visibles 2 → 3 → 2).
+- **Unity → puente → OpenAI: PASS.** `Server/game-live-check.mjs` inició un puente temporal limitado a una solicitud al proveedor y ejecutó `NebulaSmokeTest.ApiOnce`. Unity recibió y validó «Eco Esencial» en español, identificó el modelo y comprobó la cancelación/retorno local sin sustitución tardía del patrón.
+- Se realizaron dos generaciones reales en total. La clave se proporcionó temporalmente mediante el entorno; no se guardó en el repositorio ni en un archivo de configuración. El proceso Unity no recibió la clave del proveedor.
+- La prueba de Play Mode restauró campaña, progreso y dificultad. No completa manualmente una partida ni certifica generación en todos los idiomas/mundos.
+- Evidencia local: `TestResults/openai-live-result.json`, `TestResults/Unity-live-api-generation.json`, `TestResults/Unity-api-result.txt` y `TestResults/Unity-live-api.log`. Los resultados generados no contienen credenciales.
+- Esta comprobación resuelve la prueba real pendiente que se menciona en las secciones históricas siguientes. Las partidas futuras requieren iniciar el puente con una clave disponible.
+
 ## Edición bilingüe 4.2 — 4 de noviembre
 
 - **Localización: PASS.** 1.268 comprobaciones de catálogo, textos compuestos con números, mayúsculas, límites de palabras, cambio de idioma y caché. Ejecutar `Tests/Run-Checks.ps1`.

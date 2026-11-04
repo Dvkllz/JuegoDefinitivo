@@ -1,5 +1,11 @@
 # Ecos de Nébula
 
+## API comprobada en vivo — 4 de noviembre de 2026
+
+Se verificó una generación real con `gpt-4.1-mini` y otra desde Unity, incluyendo la validación del patrón y el retorno seguro al modo local. La clave se usó temporalmente en memoria durante la prueba. Consulta `VERIFICACION.md` para conocer el alcance y la evidencia.
+
+`node Server/live-check.mjs` acepta una clave del entorno o de `.env.local`. `node Server/game-live-check.mjs` comprueba el recorrido Unity → puente → OpenAI con un máximo de una generación; requiere el Editor cerrado y restaura los guardados. Son pruebas reales que pueden consumir saldo de API.
+
 ## Español e inglés — 4 de noviembre de 2026
 
 Selecciona **Español / English** en la barra superior o en la pausa. El cambio es inmediato y queda guardado; no reinicia el patrón ni modifica el progreso. Incluye menús, HUD, combate, dificultades, Atlas, talentos, logros, memorias y reglas de los guardianes.
