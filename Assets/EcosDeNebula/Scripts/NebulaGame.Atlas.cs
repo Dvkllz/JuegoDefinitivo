@@ -153,7 +153,6 @@ namespace EcosDeNebula
             Label(new Rect(uiW-256,133,203,48),trial.Title,23,paper,TextAnchor.UpperLeft,true);
             Label(new Rect(uiW-256,201,203,103),trial.Hint,17,mint);
             Label(new Rect(uiW-256,326,203,42),"Reglas locales verificadas.\nNo usa ni consume la API.",12,dim);
-            if(phase==JourneyPhase.Watching||phase==JourneyPhase.Answering)RuneLabels();
         }
         void ExpeditionBriefingUI()
         {

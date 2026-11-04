@@ -62,7 +62,7 @@ namespace EcosDeNebula
         bool muted, reducedMotion, paused, assisted, showHelp, endless;
         float phaseClock, noteClock, answerClock, orbit = -18, desiredOrbit = -18;
         float cameraDistance = 26, lastInput = -10, flash;
-        int shown, highlighted = -1, selected = -1, lastWrong = -1, scoreGain;
+        int shown, highlighted = -1, lastWrong = -1, scoreGain;
         string toast = "";
         float toastTime;
         public const float RuneEntryRadius = 1.65f;
@@ -129,7 +129,7 @@ namespace EcosDeNebula
             world = root.AddComponent<NebulaWorld>(); world.Build(biome); world.ReducedMotion = reducedMotion;
             if(progress!=null)world.SetCloak(progress.skin);
             if(ambient!=null)ambient.pitch=biome==0?1:biome==1?0.89f:1.12f;
-            occupiedRune = -1; selected = -1;
+            occupiedRune = -1;
         }
 
         void StartJourney(bool fresh)
@@ -352,7 +352,6 @@ namespace EcosDeNebula
                 world.Luma.position = new Vector3(next.x, 0.1f + (reducedMotion ? 0 : Mathf.Abs(Mathf.Sin(Time.unscaledTime * 10)) * 0.055f), next.z);
                 world.Luma.rotation = Quaternion.Slerp(world.Luma.rotation, Quaternion.LookRotation(direction), dt * 12);
             }
-            selected = -1; float closest = 2.6f;
             for(int i=0;i<world.Fragments.Length;i++)
             {
                 int bit=1<<(world.Biome*4+i);
@@ -363,11 +362,6 @@ namespace EcosDeNebula
                     toast="Fragmento de memoria encontrado · +40 destellos";toastTime=4;Play(notes[i]);SaveJourney();
                     RewardFragment();
                 }
-            }
-            for (int i=0;i<4;i++)
-            {
-                float distance = Vector3.Distance(world.Luma.position, world.Runes[i].Position);
-                if (distance < closest) { closest = distance; selected = i; }
             }
         }
 
@@ -552,23 +546,6 @@ namespace EcosDeNebula
             string origin=trial!=null&&trial.GeneratedByApi?"OPENAI · "+trial.Model:apiEnabled?ai.Status:"Modo local elegido";
             Label(new Rect(uiW-257,352,205,33),origin,11,trial!=null&&trial.GeneratedByApi?mint:dim);
             Label(new Rect(uiW-257,391,205,43),trial==null?"Cada patrón cuenta una historia.":trial.Title,17,paper,TextAnchor.UpperLeft,true);
-            if(phase==JourneyPhase.Watching || phase==JourneyPhase.Answering) RuneLabels();
-        }
-
-        void RuneLabels()
-        {
-            for(int i=0;i<4;i++)
-            {
-                Vector3 p=view.WorldToScreenPoint(world.Runes[i].Crystal.position+Vector3.up*1.2f);
-                if(p.z<0)continue;
-                float x=p.x/uiScale,y=(Screen.height-p.y)/uiScale;
-                Color c=NebulaWorld.RuneColors[i];
-                Rect rect=new Rect(x-57,y-18,114,32);
-                Box(rect,new Color(ink.r,ink.g,ink.b,0.9f));
-                Box(new Rect(rect.x,rect.y,3,32),c);
-                Label(rect,(i+1)+"  "+RuneNames[i],12,c,TextAnchor.MiddleCenter);
-                if(i==selected && phase==JourneyPhase.Answering)Label(new Rect(x-100,y+19,200,24),occupiedRune==i?"SAL DEL ARO PARA REPETIR":"ENTRA EN EL ARO",11,paper,TextAnchor.MiddleCenter);
-            }
         }
 
         void BriefingUI()
