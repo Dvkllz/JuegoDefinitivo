@@ -103,6 +103,16 @@ namespace EcosDeNebula
             return go.transform;
         }
 
+        Transform FloorRing(string label, Vector3 position, float radius, float width, Material material)
+        {
+            // A fixed horizontal mesh stays above the pavement at every camera angle.
+            // Camera-facing ribbons can dip into it and overlap other floor markings.
+            var ring=Facet(label,position,new[]{0f,0f},new[]{radius+width*0.5f,radius-width*0.5f},96,material);
+            var renderer=ring.GetComponent<MeshRenderer>();
+            renderer.shadowCastingMode=ShadowCastingMode.Off;renderer.receiveShadows=false;
+            return ring.transform;
+        }
+
         public void Build(int biome)
         {
             Biome=biome;
@@ -150,9 +160,9 @@ namespace EcosDeNebula
             Facet("Borde de musgo",Vector3.zero,new[]{-0.48f,-0.12f,-0.12f},new[]{10.3f,10.1f,0f},15,grass);
             Facet("Plaza ceremonial",Vector3.zero,new[]{-0.1f,0.02f,0.02f},new[]{7.7f,7.5f,0f},48,edge);
             Facet("Mosaico central",Vector3.zero,new[]{0.03f,0.05f,0.05f},new[]{5.9f,5.9f,0f},48,stone);
-            Ring("Círculo exterior",new Vector3(0,0.085f,0),7.15f,0.055f,gold);
-            Ring("Círculo de ecos",new Vector3(0,0.09f,0),5.95f,0.035f,lineMat);
-            Ring("Círculo del corazón",new Vector3(0,0.12f,0),2.35f,0.045f,gold);
+            FloorRing("Círculo exterior",new Vector3(0,0.085f,0),7.15f,0.055f,gold);
+            FloorRing("Círculo de ecos",new Vector3(0,0.09f,0),5.95f,0.035f,lineMat);
+            FloorRing("Círculo del corazón",new Vector3(0,0.12f,0),2.35f,0.045f,gold);
             for(int i=0;i<32;i++)
             {
                 float a=i*Mathf.PI*2/32;
@@ -164,9 +174,9 @@ namespace EcosDeNebula
             {
                 Vector3 p=positions[i];
                 Facet("Pedestal "+(i+1),p,new[]{0.08f,0.32f,0.45f,0.45f},new[]{1.2f,1.2f,0.98f,0f},8,dark);
-                Ring("Sello de runa",p+Vector3.up*0.46f,0.84f,0.06f,Mat(RuneColors[i],1.5f));
-                Ring("Aro de entrada",p+Vector3.up*0.12f,NebulaGame.RuneEntryRadius,0.075f,Mat(RuneColors[i],0.65f));
-                Ring("Límite para repetir",p+Vector3.up*0.11f,NebulaGame.RuneExitRadius,0.025f,Mat(RuneColors[i]*0.55f,0.2f));
+                FloorRing("Sello de runa",p+Vector3.up*0.48f,0.84f,0.06f,Mat(RuneColors[i],1.5f));
+                FloorRing("Aro de entrada",p+Vector3.up*0.16f,NebulaGame.RuneEntryRadius,0.075f,Mat(RuneColors[i],0.65f));
+                FloorRing("Límite para repetir",p+Vector3.up*0.14f,NebulaGame.RuneExitRadius,0.025f,Mat(RuneColors[i]*0.55f,0.2f));
                 GameObject crystal=Facet("Cristal "+(i+1),p+Vector3.up*1.35f,new[]{-0.65f,-0.28f,0.48f,1.02f},new[]{0f,0.52f,0.45f,0f},i+4,Mat(RuneColors[i],0.45f));
                 var collider=crystal.AddComponent<SphereCollider>();collider.radius=0.95f;collider.center=Vector3.up*0.2f;
                 crystal.AddComponent<RuneTarget>().Index=i;
@@ -206,7 +216,7 @@ namespace EcosDeNebula
             for(int i=0;i<4;i++)
             {
                 Fragments[i]=Facet("Fragmento de memoria",fragmentPositions[i],new[]{-0.25f,0f,0.3f},new[]{0f,0.18f,0f},4,Mat(new Color(1,0.85f,0.45f),2)).transform;
-                Ring("Sello del fragmento",fragmentPositions[i]+Vector3.down*0.65f,0.38f,0.025f,gold);
+                FloorRing("Sello del fragmento",fragmentPositions[i]+Vector3.down*0.65f,0.38f,0.025f,gold);
             }
             // Large celestial silhouettes make each sanctuary recognizable from its skyline.
             var planet=Shape(PrimitiveType.Sphere,"Luna guardiana",new Vector3(-20,16,35),Vector3.one*10,Mat(Color.Lerp(accent,new Color(0.2f,0.28f,0.45f),0.7f),0.15f));
