@@ -1,6 +1,13 @@
 # Verificación de Ecos de Nébula
 
-Última revisión: 3 de noviembre de 2026. Equipo Windows, Unity 6000.6.5f1.
+Última revisión: 4 de noviembre de 2026. Equipo Windows, Unity 6000.6.5f1.
+
+## Cristales despejados — 4 de noviembre
+
+- **Compilación: PASS.** Ejecutable actualizado sin etiquetas flotantes de runas. Log: `TestResults/Unity-v413-Cristales.log`.
+- Se eliminaron el dibujo de etiquetas y sus llamadas desde campaña y expediciones. Los avisos de proximidad se mantienen únicamente en el panel inferior.
+- Cambio de presentación: no se modificaron las reglas de respuesta o combate ni se repitieron pruebas de lógica. No se llamó a OpenAI.
+- Paquete: `Builds/EcosDeNebula-4.1.3-cristales.zip`.
 
 ## Portal y lobby — 3 de noviembre
 

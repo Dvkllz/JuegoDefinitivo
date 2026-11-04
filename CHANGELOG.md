@@ -1,5 +1,10 @@
 # Ecos de Nébula — La era de los guardianes
 
+## 4 de noviembre de 2026 — Cristales despejados
+
+- Eliminados los nombres, números y avisos flotantes sobre los cristales durante la demostración y la respuesta, tanto en campaña como en expediciones y diario.
+- Se conservan los aros, colores, sonidos y las instrucciones del panel inferior. La selección sigue realizándose al entrar con Luma en cada aro.
+
 ## 3 de noviembre de 2026 — Corrección visual del lobby
 
 - Portal reconstruido con dovelas radiales y juntas entre piezas: desaparecen las caras superpuestas del arco y de su unión con los pilares.
