@@ -2,6 +2,16 @@
 
 Última revisión: 4 de noviembre de 2026. Equipo Windows, Unity 6000.6.5f1.
 
+## Edición bilingüe 4.2 — 4 de noviembre
+
+- **Localización: PASS.** 1.268 comprobaciones de catálogo, textos compuestos con números, mayúsculas, límites de palabras, cambio de idioma y caché. Ejecutar `Tests/Run-Checks.ps1`.
+- **Regresión offline: PASS.** Se repitieron las 69.194 comprobaciones de patrones, expediciones y combate. Sumadas a localización: 70.462 comprobaciones.
+- **Unity Play Mode: PASS.** 17 comprobaciones de carga del catálogo, persistencia de idioma, contenido independiente de ayuda/acerca de, conservación del patrón y posición de respuesta, guardado intacto y tratamiento de texto generativo de otro idioma. La prueba restaura las preferencias y guardados previos. Resultado: `TestResults/Unity-localization-result.txt`.
+- **Puente: PASS.** Ocho pruebas simuladas verifican el contrato de idiomas, las instrucciones de generación, validación de patrones, errores, autenticación local y límites. Comando: `node --test Server/director.test.mjs`. No se llamó a OpenAI ni se usaron credenciales reales.
+- **Compilación: PASS.** Ejecutable Windows actualizado. Log: `TestResults/Unity-bilingual-build.log`.
+- **Revisión visual:** menú en español/inglés; guía española desplazada hasta el final; ayuda inglesa; Acerca de en inglés y su sección final. Revisado en la ventana del juego con área aproximada de 1280 × 720. No se afirma una revisión manual de cada pantalla ni una prueba real de generación por API.
+- Paquete: `Builds/EcosDeNebula-4.2-idiomas.zip`.
+
 ## Cristales despejados — 4 de noviembre
 
 - **Compilación: PASS.** Ejecutable actualizado sin etiquetas flotantes de runas. Log: `TestResults/Unity-v413-Cristales.log`.

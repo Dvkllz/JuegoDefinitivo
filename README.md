@@ -1,5 +1,13 @@
 # Ecos de Nébula
 
+## Español e inglés — 4 de noviembre de 2026
+
+Selecciona **Español / English** en la barra superior o en la pausa. El cambio es inmediato y queda guardado; no reinicia el patrón ni modifica el progreso. Incluye menús, HUD, combate, dificultades, Atlas, talentos, logros, memorias y reglas de los guardianes.
+
+**Cómo jugar** ahora contiene una guía propia de controles, selección física, combate y reglas. Usa la rueda, la barra lateral o Re Pág / Av Pág para recorrerla; el alto de los párrafos se calcula con su texto para evitar recortes. **Acerca de** muestra el lore, los personajes, el stack y los créditos de Josué Guerrero — Diseño de Interfaces de Software.
+
+La integración generativa solicita títulos y pistas en el idioma seleccionado. Si cambias de idioma en un reto ya generado, conserva el código y muestra texto local traducido hasta la siguiente generación. Las pruebas de esta actualización son locales y simuladas; no se hicieron llamadas de pago a OpenAI.
+
 ## Runas a pie — 3 de noviembre de 2026
 
 Ahora el patrón se responde **solo con el personaje**: mueve a Luma con WASD hasta entrar en el aro de color que rodea cada cristal. La entrada activa una única runa automáticamente. Para repetirla, cruza el círculo exterior y vuelve a entrar. No hace falta pulsar una tecla de interacción; los números identifican las runas, pero no son atajos.
@@ -36,7 +44,7 @@ Todo este contenido nuevo funciona sin Internet. **La API no se ha activado ni p
 
 Abre `Jugar.cmd` para el modo local o el ejecutable de `Builds/Windows`. Consulta `CHANGELOG.md` para las novedades completas.
 
-Una aventura original **3D para Unity 6**, en español, sobre memoria, patrones y una IA que aprende de tus intentos. La edición generativa conecta con la **API de OpenAI** para crear patrones, nombres, mensajes y pistas. También incluye un modo local sin conexión.
+Una aventura original **3D para Unity 6**, en español e inglés, sobre memoria, patrones y una IA que aprende de tus intentos. La edición generativa conecta con la **API de OpenAI** para crear patrones, nombres, mensajes y pistas. También incluye un modo local sin conexión.
 
 ## Abrir y jugar
 

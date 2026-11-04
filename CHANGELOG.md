@@ -1,5 +1,14 @@
 # Ecos de Nébula — La era de los guardianes
 
+## 4 de noviembre de 2026 — Edición bilingüe 4.2
+
+- Selector Español / English con preferencia persistente en el menú y la pausa; cambio inmediato sin reiniciar el reto.
+- Catálogo traducido para campaña, combate, expediciones, carreras, Atlas, talentos, logros, memorias y estados del puente de IA.
+- Cómo jugar y Acerca de ahora tienen contenidos separados. La guía explica controles, selección física, combate, ayudas y reglas; Acerca de presenta historia, personajes, tecnología y créditos.
+- Paneles con altura de texto calculada y desplazamiento mediante rueda, barra o Re Pág / Av Pág. Se bloquean los controles de fondo mientras están abiertos.
+- Las solicitudes generativas incluyen un idioma validado (`es` o `en`). El cambio de idioma durante un patrón generado conserva su solución y usa texto local traducido hasta la próxima generación.
+- Corregida la descripción del Observatorio en el prompt del puente: se responde el código completo, una entrada por destello.
+
 ## 4 de noviembre de 2026 — Cristales despejados
 
 - Eliminados los nombres, números y avisos flotantes sobre los cristales durante la demostración y la respuesta, tanto en campaña como en expediciones y diario.
