@@ -11,6 +11,7 @@ namespace EcosDeNebula
     {
         public int world,seal,length;
         public LearningProfile profile;
+        public string language = "es";
     }
     [Serializable] sealed class LocalSession { public string url,token; }
     [Serializable] sealed class AIError { public string error; }
@@ -55,7 +56,7 @@ namespace EcosDeNebula
         {
             if(session==null){completed(false);yield break;}
             Busy=true;Status="El Tejedor está creando...";
-            AIRequest payload=new AIRequest{world=world,seal=Math.Min(seal,3),length=trial.Mode==PatternMode.Prediction?trial.MotifLength:trial.Demonstration.Length,profile=profile};
+            AIRequest payload=new AIRequest{world=world,seal=Math.Min(seal,3),length=trial.Mode==PatternMode.Prediction?trial.MotifLength:trial.Demonstration.Length,profile=profile,language=NebulaLocalization.Language};
             using(UnityWebRequest request=new UnityWebRequest(session.url+"/challenge","POST"))
             {
                 active=request;
@@ -66,7 +67,7 @@ namespace EcosDeNebula
                 bool success=false;
                 if(request.result==UnityWebRequest.Result.Success)
                 {
-                    try {var result=JsonUtility.FromJson<GeneratedPattern>(request.downloadHandler.text);success=result!=null&&result.TryApply(trial);}
+                    try {var result=JsonUtility.FromJson<GeneratedPattern>(request.downloadHandler.text);success=result!=null&&result.TryApply(trial);if(success)trial.TextLanguage=payload.language;}
                     catch(Exception){success=false;}
                     Status=success?"Generado por OpenAI":"Respuesta inválida · modo local";
                 }

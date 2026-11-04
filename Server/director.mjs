@@ -8,13 +8,15 @@ export function validateRequest(data) {
   if (!data || !integer(data.world, 0, 2) || !integer(data.seal, 0, 3) ||
       !integer(data.length, data.world === 2 ? 2 : 3, data.world === 2 ? 3 : 7))
     throw new DirectorError('invalid_request', 400);
+  if (data.language !== undefined && !['es', 'en'].includes(data.language))
+    throw new DirectorError('invalid_language', 400);
   const p = data.profile;
   if (!p || !Number.isFinite(p.skill) || p.skill < 0 || p.skill > 1 ||
       !integer(p.trials, 0, 1000000) || !integer(p.streak, 0, 1000000) ||
       !Array.isArray(p.seen) || !Array.isArray(p.missed) || p.seen.length !== 4 || p.missed.length !== 4 ||
       p.seen.some((n, i) => !integer(n, 0, 10000000) || !integer(p.missed[i], 0, n)))
     throw new DirectorError('invalid_profile', 400);
-  return { world: data.world, seal: data.seal, length: data.length,
+  return { world: data.world, seal: data.seal, length: data.length, language: data.language ?? 'es',
     profile: { skill: p.skill, trials: p.trials, streak: p.streak, seen: p.seen, missed: p.missed } };
 }
 
@@ -41,9 +43,9 @@ export async function generateChallenge(request, { apiKey, model = 'gpt-4.1-mini
         items: { type: 'integer', minimum: 0, maximum: 3 } }
     }, required: ['title', 'message', 'hint', 'constellation', 'motif'] };
   const instructions = `Eres El Tejedor, mentor de Luma en el juego 3D Ecos de Nébula. Crea un reto original y justo.
-Todo el texto en español, cálido y breve. Runas: 0 Hoja, 1 Sol, 2 Marea, 3 Estrella.
+${request.language === 'en' ? 'Write title, message and hint entirely in English, warm and brief. Runes: 0 Leaf, 1 Sun, 2 Tide, 3 Star. Worlds: Jade Forest, Amber Sea, Violet Observatory. The mentor is the Weaver.' : 'Todo el texto en español, cálido y breve. Runas: 0 Hoja, 1 Sol, 2 Marea, 3 Estrella.'}
 Mundo 0 Bosque de Jade: el jugador repetirá motif. Mundo 1 Mar de Ámbar: verá motif y responderá al revés.
-Mundo 2 Observatorio Violeta: verá motif repetido dos veces y completará una tercera repetición.
+Mundo 2 Observatorio Violeta: verá un código basado en motif y repetirá TODO el código, incluidas todas sus repeticiones. Cada destello corresponde a una respuesta.
 Genera exactamente length enteros, al menos dos distintos. Usa agrupaciones, simetrías o alternancia con variedad.
 Refuerza las runas con mayor proporción de errores (missed+1)/(seen+4). No inventes métricas ni afirmes detectar emociones.
 title nombra este patrón; message es una frase de ambientación/ánimo sin revelar números o el orden.
