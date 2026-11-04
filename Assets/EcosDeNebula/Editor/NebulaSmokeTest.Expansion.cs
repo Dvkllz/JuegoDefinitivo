@@ -43,7 +43,7 @@ namespace EcosDeNebula.Editor
             }
             else if(stage==3)
             {
-                if(phase==JourneyPhase.Answering)Call("Submit",Get<PatternAttempt>("attempt").Expected);
+                if(phase==JourneyPhase.Answering)EnterRune(Get<PatternAttempt>("attempt").Expected);
                 else if(phase==JourneyPhase.Success)
                 {
                     completions++;Call("Advance");
@@ -69,7 +69,7 @@ namespace EcosDeNebula.Editor
             else if(stage==4)
             {
                 Call("BeginTrial");Set("phase",JourneyPhase.Answering);Set("lastInput",-10f);
-                Call("Submit",(Get<PatternAttempt>("attempt").Expected+1)%4);
+                EnterRune((Get<PatternAttempt>("attempt").Expected+1)%4);
                 if(Get<JourneyPhase>("phase")==JourneyPhase.Defeat)
                 {
                     Check(Get<ExpeditionRun>("expedition")==null,"One code error ends the entire daily expedition");

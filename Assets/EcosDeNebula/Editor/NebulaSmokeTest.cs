@@ -110,6 +110,14 @@ namespace EcosDeNebula.Editor
         static T Get<T>(string field){return (T)typeof(NebulaGame).GetField(field,Private).GetValue(game);}
         static void Set(string field,object value){typeof(NebulaGame).GetField(field,Private).SetValue(game,value);}
         static void Call(string method,params object[] args){typeof(NebulaGame).GetMethod(method,Private).Invoke(game,args);}
+        static void EnterRune(int rune)
+        {
+            var world=Get<NebulaWorld>("world");
+            world.Luma.position=new Vector3(0,0.1f,-5);
+            Call("UpdateRuneEntry");
+            world.Luma.position=world.Walkable(world.Runes[rune].Position+Vector3.back*1.35f);
+            Call("UpdateRuneEntry");
+        }
 
         static void Tick()
         {
@@ -158,7 +166,7 @@ namespace EcosDeNebula.Editor
                         pauseUntil=now+2;stage=5;return;
                     }
                     int expected=Get<PatternAttempt>("attempt").Expected;
-                    Call("Submit",(expected+1)%4);
+                    EnterRune((expected+1)%4);
                     Check(Get<JourneyPhase>("phase")==JourneyPhase.Defeat,"Incorrect response ends the run");
                     Check(Get<NebulaSave>("save").seals==0,"Error never awards a seal");
                     Call("RestartFailedRun");Call("BeginTrial");stage=6;
@@ -167,7 +175,7 @@ namespace EcosDeNebula.Editor
                 {
                     if(phase==JourneyPhase.Answering)
                     {
-                        Call("Submit",Get<PatternAttempt>("attempt").Expected);
+                        EnterRune(Get<PatternAttempt>("attempt").Expected);
                     }
                     else if(phase==JourneyPhase.Success)
                     {
@@ -194,7 +202,7 @@ namespace EcosDeNebula.Editor
                 }
                 else if(stage==4 && phase==JourneyPhase.Answering)
                 {
-                    Call("Submit",Get<PatternAttempt>("attempt").Expected);
+                    EnterRune(Get<PatternAttempt>("attempt").Expected);
                     if(Get<JourneyPhase>("phase")==JourneyPhase.Success)
                     {
                         Check(Get<NebulaSave>("save").seals==3,"Endless mode preserves campaign checkpoint");
@@ -219,7 +227,7 @@ namespace EcosDeNebula.Editor
             bool apiOnce=SessionState.GetBool("Nebula.Smoke.ApiOnce",false);
             string result=error==null?(apiOnce?"PASS: Unity -> local bridge -> validated playable pattern; cancellation/fallback verified; model="+SessionState.GetString("Nebula.Smoke.Provider",""):renderOnly?"PASS: three offscreen 3D world renders (no HUD).":"PASS: Unity Play Mode; "+checks+" integration checks; all nine seals, three 3D worlds, pause, failure, replay, save/resume and endless mode."):"FAIL: "+error;
             if(error==null&&SessionState.GetBool("Nebula.Smoke.Expansion",false))result="PASS: expansion Play Mode; "+checks+" checks; six encounters, guardians, shield, blessings, daily defeat, checkpoint isolation, progression, collectibles, wardrobe, atlas pause and three spatial races.";
-            if(error==null&&SessionState.GetBool("Nebula.Smoke.Combat",false))result="PASS: combat Play Mode; "+checks+" checks; five difficulties, equal flash/slot counts, enemy telegraphs, dodge immunity, melee kills, projectile blocking/collision, pause, lethal damage, full restart and preserved permanent progression.";
+            if(error==null&&SessionState.GetBool("Nebula.Smoke.Combat",false))result="PASS: combat Play Mode; "+checks+" checks; five difficulties, physical rune entry, repeated symbols, boundary hysteresis, remote input rejection, equal flash/slot counts, enemy telegraphs, dodge immunity, melee kills, projectile blocking/collision, pause, lethal damage, full restart and preserved permanent progression.";
             Directory.CreateDirectory("TestResults");
             string resultPath=SessionState.GetBool("Nebula.Smoke.Combat",false)?"TestResults/Unity-combat-result.txt":SessionState.GetBool("Nebula.Smoke.Expansion",false)?"TestResults/Unity-expansion-result.txt":apiOnce?"TestResults/Unity-api-result.txt":renderOnly?"TestResults/Unity-render-result.txt":"TestResults/Unity-smoke-result.txt";
             File.WriteAllText(resultPath,result);

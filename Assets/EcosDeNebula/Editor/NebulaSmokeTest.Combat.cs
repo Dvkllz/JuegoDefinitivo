@@ -35,13 +35,14 @@ namespace EcosDeNebula.Editor
                 pausedEnemy=Visual(Enemies[0]).Root.position;Set("paused",true);pauseUntil=now+0.6;stage=2;
                 int health=Get<CombatLife>("combat").Health;Call("DamagePlayer");
                 Check(Get<CombatLife>("combat").Health==health,"Pause prevents damage");
-                Call("Submit",(Get<PatternAttempt>("attempt").Expected+1)%4);
+                EnterRune((Get<PatternAttempt>("attempt").Expected+1)%4);
                 Check(Get<JourneyPhase>("phase")==JourneyPhase.Answering,"Pause prevents wrong input");
             }
             else if(stage==2&&now>=pauseUntil)
             {
                 Check(Visual(Enemies[0]).Root.position==pausedEnemy,"Pause freezes enemy movement");Set("paused",false);
                 var w=Get<NebulaWorld>("world");var cfg=CombatDifficulty.Get(combatDifficulty);
+                CheckRuneWalking();
                 Call("ClearCombatWave");Set("spawnSerial",0);Call("SpawnEnemy");Set("spawnClock",100f);
                 object foe=Enemies[0];Visual(foe).Root.position=w.Luma.position+Vector3.right*1.2f;
                 EnemyField(foe,"Cooldown",0f);Call("UpdateCombat",0.01f);
@@ -64,7 +65,7 @@ namespace EcosDeNebula.Editor
                 Set("combat",new CombatLife(2,0));Call("FireShot",foe);Call("UpdateCombat",0.8f);
                 Check(Get<CombatLife>("combat").Health==1,"Swept projectile collision damages player");
                 Call("ClearCombatWave");Set("combat",new CombatLife(7,2));Set("lastInput",-10f);
-                Call("Submit",(Get<PatternAttempt>("attempt").Expected+1)%4);
+                EnterRune((Get<PatternAttempt>("attempt").Expected+1)%4);
                 Check(Get<JourneyPhase>("phase")==JourneyPhase.Defeat,"A single wrong rune defeats even a shielded player");
                 Check(Get<NebulaSave>("save").world==0&&Get<NebulaSave>("save").seals==0&&Get<NebulaSave>("save").score==0,"Failure resets entire campaign");
                 Check(Get<NebulaSave>("save").fragments==9&&Get<NebulaProgress>("progress").xp==600,"Failure preserves memories and permanent XP");
@@ -76,7 +77,7 @@ namespace EcosDeNebula.Editor
             {
                 Call("ReturnHome");var save=Get<NebulaSave>("save");save.world=1;save.seals=2;save.score=600;
                 Call("StartExpedition",false);Call("BeginTrial");Set("phase",JourneyPhase.Answering);Set("lastInput",-10f);
-                Call("Submit",(Get<PatternAttempt>("attempt").Expected+1)%4);
+                EnterRune((Get<PatternAttempt>("attempt").Expected+1)%4);
                 Check(Get<JourneyPhase>("phase")==JourneyPhase.Defeat&&Get<ExpeditionRun>("expedition")==null,"Expedition code error terminates run");
                 Check(save.world==1&&save.seals==2&&save.score==600,"Expedition defeat does not erase separate campaign");
                 Call("RestartFailedRun");Check(Get<ExpeditionRun>("expedition").Round==0,"Expedition restart returns to first encounter");
@@ -85,6 +86,39 @@ namespace EcosDeNebula.Editor
                 Check(save.world==0&&save.seals==0,"Lethal damage resets campaign checkpoint");
                 Finish(null);
             }
+        }
+
+        static void CheckRuneWalking()
+        {
+            var w=Get<NebulaWorld>("world");
+            var original=Get<PatternAttempt>("attempt");
+            var probe=new PatternAttempt(new[]{0,0,1,2});
+            Set("attempt",probe);Set("lastInput",-10f);
+            w.Luma.position=new Vector3(0,0.1f,-5);Call("SyncRuneEntry");
+            Call("Submit",0);Check(probe.Position==0,"Remote submission is rejected");
+            w.Luma.position=w.Runes[0].Position+Vector3.back*1.35f;
+            Set("phase",JourneyPhase.Watching);Call("UpdateRuneEntry");
+            Check(probe.Position==0,"Walking during demonstration cannot answer");
+            Set("phase",JourneyPhase.Answering);Call("SyncRuneEntry");Call("UpdateRuneEntry");
+            Check(probe.Position==0,"Standing at a crystal when the turn starts cannot answer");
+            EnterRune(0);Check(probe.Position==1,"Entering the reachable ring submits once");
+            Set("lastInput",-10f);
+            for(int i=0;i<20;i++)Call("UpdateRuneEntry");
+            Check(probe.Position==1,"Standing in a ring never repeats the answer");
+            w.Luma.position=w.Runes[0].Position+Vector3.back*1.8f;Call("UpdateRuneEntry");
+            w.Luma.position=w.Runes[0].Position+Vector3.back*1.5f;Call("UpdateRuneEntry");
+            Check(probe.Position==1,"Small movements on the entry edge do not repeat");
+            EnterRune(0);Check(probe.Position==2,"Leaving the outer ring enables repeated symbols");
+            Set("lastInput",-10f);
+            w.Luma.position=new Vector3(0,0.1f,-5);Call("UpdateRuneEntry");
+            w.Luma.position=w.Runes[1].Position+Vector3.back*1.35f;
+            Set("paused",true);Call("UpdateRuneEntry");Set("paused",false);
+            Set("showHelp",true);Call("UpdateRuneEntry");Set("showHelp",false);
+            Set("panel",1);Call("UpdateRuneEntry");Set("panel",0);
+            Check(probe.Position==2,"Pause, help and Atlas block physical answers");
+            Call("UpdateRuneEntry");Check(probe.Position==3,"Another crystal accepts the next symbol");
+            Set("attempt",original);Set("lastInput",-10f);
+            w.Luma.position=new Vector3(0,0.1f,-5);Call("SyncRuneEntry");
         }
     }
 }
