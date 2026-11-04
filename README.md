@@ -1,5 +1,11 @@
 # Ecos de Nébula
 
+## Runas a pie — 3 de noviembre de 2026
+
+Ahora el patrón se responde **solo con el personaje**: mueve a Luma con WASD hasta entrar en el aro de color que rodea cada cristal. La entrada activa una única runa automáticamente. Para repetirla, cruza el círculo exterior y vuelve a entrar. No hace falta pulsar una tecla de interacción; los números identifican las runas, pero no son atajos.
+
+Durante la demostración puedes moverte sin responder. Si terminas de escuchar dentro de un aro, sal y vuelve a entrar para elegirlo. Los enemigos siguen atacando mientras recorres el santuario; usa Q para esquivar y R para combatir.
+
 ## Códigos bajo asedio — 28 de octubre de 2026
 
 **Cada destello corresponde ahora a una entrada.** Se corrigió el caso de cuatro luces y solo dos respuestas del Observatorio: hay que introducir el código completo, incluyendo las repeticiones. La pantalla indica ambos conteos y separa las luces de demostración de las celebraciones.
@@ -59,15 +65,15 @@ Luma, una pequeña guardiana con capa y bastón luminoso, viaja por un archipié
 
 Tres sellos por mundo, nueve en total, final de la historia y modo Constelación de patrones ilimitados. Un error de código o perder toda la vida devuelve la campaña al primer santuario, sin sellos ni puntos de recorrido. Pedir otra reproducción cuenta como ayuda y reduce la recompensa, pero no es un fallo.
 
-La nueva edición incluye **doce fragmentos de memoria** para encontrar caminando, botones de runas en pantalla, pistas durante el reto, celebraciones de luz y escenarios diferenciados: bosque mineral, velas de ámbar y columnas astrales. Cada fragmento añade 40 destellos y se guarda con tu progreso.
+La nueva edición incluye **doce fragmentos de memoria** para encontrar caminando, aros de activación junto a los cristales, pistas durante el reto, celebraciones de luz y escenarios diferenciados: bosque mineral, velas de ámbar y columnas astrales. Cada fragmento añade 40 destellos y se guarda con tu progreso.
 
 ## Controles
 
 | Acción | Control |
 | --- | --- |
-| Activar cristal | Teclas 1–4, teclado numérico o clic en el cristal |
+| Activar cristal | Entrar con Luma en su aro de color |
 | Mover a Luma | WASD; Mayús para correr |
-| Activar cristal cercano | E |
+| Repetir una runa | Salir del círculo exterior y volver a entrar |
 | Girar cámara | Flechas izquierda/derecha o arrastre con botón derecho |
 | Zoom | Rueda del ratón |
 | Volver a escuchar | Espacio o botón de ayuda |

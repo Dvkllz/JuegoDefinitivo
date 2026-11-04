@@ -1,5 +1,14 @@
 # Ecos de Nébula — La era de los guardianes
 
+## 3 de noviembre de 2026 — Runas a pie
+
+- Selección exclusiva por la posición de Luma: entrar en el aro de un cristal introduce una runa.
+- Eliminados los atajos 1–4, teclado numérico, E, clic sobre cristales y botones de respuesta.
+- Una entrada cuenta una vez; hay que cruzar el círculo exterior para repetir. Los pequeños movimientos en el borde no duplican respuestas.
+- Estar junto a un cristal cuando termina la demostración no responde automáticamente.
+- Aros visibles y mensajes de proximidad; instrucciones actualizadas en campaña, ayuda y HUD compartido con expediciones.
+- Las pruebas de campaña y expedición ahora responden desplazando a Luma. Nuevas comprobaciones de entrada, repetición, pausa y rechazo a distancia en las cinco dificultades.
+
 ## 28 de octubre de 2026 — Códigos bajo asedio
 
 - Corregido el contrato de presentación: el número de destellos siempre coincide con las casillas, también en códigos repetidos y al reproducir de nuevo.

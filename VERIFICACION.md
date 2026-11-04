@@ -1,6 +1,13 @@
 # Verificación de Ecos de Nébula
 
-Última revisión: 28 de octubre de 2026. Equipo Windows, Unity 6000.6.5f1.
+Última revisión: 3 de noviembre de 2026. Equipo Windows, Unity 6000.6.5f1.
+
+## Runas a pie — 3 de noviembre
+
+- **Selección física y combate: PASS.** 150 comprobaciones en Unity Play Mode, incluidas 45 nuevas sobre entrada en los aros, permanencia sin duplicados, salida y reentrada para repetir símbolos, margen de salida, bloqueo durante demostración/pausa/ayuda/Atlas y rechazo de respuestas a distancia. Las comprobaciones se repiten en las cinco dificultades. Log: `TestResults/Unity-v41-BuildCombat.log`.
+- **Controles:** solo `UpdateRuneEntry` llama al método de respuesta del juego. No hay manejadores de teclas numéricas, E, clic sobre cristales ni botones de respuesta. Los números visibles son identificadores.
+- **Lógica offline: PASS.** 69.194 comprobaciones de patrones, expediciones, progresión y combate. No se llamó a OpenAI.
+- **Compilación: PASS.** Ejecutable Windows actualizado; el paquete de esta edición es `Builds/EcosDeNebula-4.1-runas-a-pie.zip`.
 
 ## Códigos bajo asedio — 28 de octubre
 
