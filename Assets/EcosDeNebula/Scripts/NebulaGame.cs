@@ -64,8 +64,9 @@ namespace EcosDeNebula
         int shown, highlighted = -1, selected = -1, lastWrong = -1, scoreGain;
         string toast = "";
         float toastTime;
-        Vector3 walkTarget;
-        bool walkingToRune;
+        public const float RuneEntryRadius = 1.65f;
+        public const float RuneExitRadius = 2.05f;
+        int occupiedRune = -1;
         float uiScale, uiW, uiH;
         bool hasSave;
 
@@ -127,7 +128,7 @@ namespace EcosDeNebula
             world = root.AddComponent<NebulaWorld>(); world.Build(biome); world.ReducedMotion = reducedMotion;
             if(progress!=null)world.SetCloak(progress.skin);
             if(ambient!=null)ambient.pitch=biome==0?1:biome==1?0.89f:1.12f;
-            walkingToRune = false; selected = -1;
+            occupiedRune = -1; selected = -1;
         }
 
         void StartJourney(bool fresh)
@@ -193,7 +194,7 @@ namespace EcosDeNebula
             trial.BeatSeconds=Difficulty.Beat+(expedition==null?0:expedition.Patience*0.15f);
             phase = JourneyPhase.Watching; shown = 0; highlighted = -1;
             noteClock = -0.65f; phaseClock = 0; answerClock = 0;
-            attempt = new PatternAttempt(trial.Answer); walkingToRune = false;
+            attempt = new PatternAttempt(trial.Answer); occupiedRune = -1;
         }
 
         void Replay()
@@ -206,6 +207,7 @@ namespace EcosDeNebula
         void Submit(int rune)
         {
             if (phase != JourneyPhase.Answering || paused || showHelp || panel!=0 || rune<0 || rune>3 || Time.unscaledTime - lastInput < 0.16f) return;
+            if (RuneDistance(rune) > RuneEntryRadius) return;
             lastInput = Time.unscaledTime;
             if(expedition!=null){SubmitExpedition(rune);return;}
             int expected = attempt.Expected;
@@ -283,32 +285,15 @@ namespace EcosDeNebula
                 if (shown == trial.Demonstration.Length && noteClock >= 0)
                 {
                     phase = JourneyPhase.Answering; phaseClock = 0; answerClock = 0; highlighted = -1;
-                    world.ClearRuneLight();StartCombatWave();
+                    world.ClearRuneLight();SyncRuneEntry();StartCombatWave();
                 }
                 else if(shown>0&&noteClock>=-0.15f){world.CodeGap();highlighted=-1;}
             }
             else if (phase == JourneyPhase.Answering)
             {
                 answerClock += dt;
-                if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) Submit(0);
-                else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) Submit(1);
-                else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) Submit(2);
-                else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) Submit(3);
                 if (Input.GetKeyDown(KeyCode.Space)) Replay();
-                if (Input.GetKeyDown(KeyCode.E) && selected >= 0) Submit(selected);
-                if (Input.GetMouseButtonDown(0) && !PointerOverUI())
-                {
-                    RaycastHit hit;
-                    if (Physics.Raycast(view.ScreenPointToRay(Input.mousePosition), out hit, 100))
-                    {
-                        RuneTarget rune = hit.collider.GetComponent<RuneTarget>();
-                        if (rune != null)
-                        {
-                            walkTarget = world.Runes[rune.Index].Position + new Vector3(0, 0.1f, -1.15f);
-                            walkingToRune = true; Submit(rune.Index);
-                        }
-                    }
-                }
+                else UpdateRuneEntry();
             }
             else if (Input.GetKeyDown(KeyCode.Return))
             {
@@ -318,12 +303,33 @@ namespace EcosDeNebula
             }
         }
 
-        bool PointerOverUI()
+        float RuneDistance(int rune)
         {
-            float scale = Mathf.Min(Screen.width / 1600f, Screen.height / 900f);
-            Vector2 mouse = new Vector2(Input.mousePosition.x / scale, (Screen.height - Input.mousePosition.y) / scale);
-            float w = Screen.width / scale, h = Screen.height / scale;
-            return panel!=0 || mouse.y < 145 || mouse.y > h - 270 || (mouse.x < 315 && mouse.y < 825) || (mouse.x > w - 290 && mouse.y < 580);
+            Vector3 delta = world.Luma.position - world.Runes[rune].Position;
+            delta.y = 0;
+            return delta.magnitude;
+        }
+
+        void SyncRuneEntry()
+        {
+            // Already standing at a crystal when the demonstration ends is not an answer.
+            occupiedRune = -1;
+            for (int i=0;i<4;i++) if (RuneDistance(i)<=RuneExitRadius) { occupiedRune=i; break; }
+        }
+
+        void UpdateRuneEntry()
+        {
+            if (phase!=JourneyPhase.Answering || paused || showHelp || panel!=0) return;
+            // A wider exit boundary prevents repeated submissions from tiny edge movements.
+            if (occupiedRune>=0 && RuneDistance(occupiedRune)>RuneExitRadius) occupiedRune=-1;
+            if (occupiedRune>=0 || Time.unscaledTime-lastInput<0.16f) return;
+            for (int i=0;i<4;i++)
+                if (RuneDistance(i)<=RuneEntryRadius)
+                {
+                    occupiedRune=i;
+                    Submit(i);
+                    break;
+                }
         }
 
         void MoveLuma(float dt)
@@ -333,16 +339,9 @@ namespace EcosDeNebula
             Vector3 direction = Vector3.zero;
             if (input.sqrMagnitude > 0)
             {
-                walkingToRune = false;
                 Vector3 forward = view.transform.forward; forward.y = 0; forward.Normalize();
                 Vector3 right = view.transform.right; right.y = 0; right.Normalize();
                 direction = (right * input.x + forward * input.z).normalized;
-            }
-            else if (walkingToRune)
-            {
-                Vector3 delta = walkTarget - world.Luma.position; delta.y = 0;
-                if (delta.magnitude < 0.15f) walkingToRune = false;
-                else direction = delta.normalized;
             }
             if(dashTime>0&&direction.sqrMagnitude<0.01f)direction=world.Luma.forward;
             if (direction.sqrMagnitude > 0.01f)
@@ -567,7 +566,7 @@ namespace EcosDeNebula
                 Box(rect,new Color(ink.r,ink.g,ink.b,0.9f));
                 Box(new Rect(rect.x,rect.y,3,32),c);
                 Label(rect,(i+1)+"  "+RuneNames[i],12,c,TextAnchor.MiddleCenter);
-                if(i==selected && phase==JourneyPhase.Answering)Label(new Rect(x-66,y+19,132,24),"E · ACTIVAR",11,paper,TextAnchor.MiddleCenter);
+                if(i==selected && phase==JourneyPhase.Answering)Label(new Rect(x-100,y+19,200,24),occupiedRune==i?"SAL DEL ARO PARA REPETIR":"ENTRA EN EL ARO",11,paper,TextAnchor.MiddleCenter);
             }
         }
 
@@ -579,7 +578,7 @@ namespace EcosDeNebula
             Label(new Rect(x+30,uiH-304,620,22),"0"+(save.world+1)+"  /  "+WorldSubtitles[save.world].ToUpperInvariant(),11,mint);
             Label(new Rect(x+29,uiH-270,622,50),save.world==0?"Escucha. Recuerda. Responde.":save.world==1?"El final es el principio.":"Imagina el siguiente eco.",32,paper,TextAnchor.UpperLeft,true);
             Label(new Rect(x+30,uiH-206,620,57),WorldStories[save.world],17,paper);
-            Label(new Rect(x+30,uiH-134,290,54),"Activa con clic o teclas 1–4.\nTambién puedes caminar con WASD.",13,dim);
+            Label(new Rect(x+30,uiH-134,290,54),"Camina al aro de cada cristal.\nSal del aro para repetir una runa.",13,dim);
             if(Button(new Rect(x+352,uiH-123,296,55),"Escuchar el patrón   →",true,!paused&&!showHelp))BeginTrial();
         }
 
@@ -600,19 +599,15 @@ namespace EcosDeNebula
                 if(watching&&i==shown-1)Box(new Rect(r.x,r.yMax-2,r.width,2),NebulaWorld.RuneColors[trial.Demonstration[i]]);
                 Label(r,watching&&i<shown?(trial.Demonstration[i]+1).ToString():filled?"✓":"·",20,filled?mint:dim,TextAnchor.MiddleCenter);
             }
-            Label(new Rect(x+27,y+116,590,38),watching?trial.Demonstration.Length+" destellos = "+trial.Answer.Length+" respuestas. Los enemigos entran al responder.":"1–4 · runas   WASD · mover   Q · esquivar   R · atacar",14,dim);
+            Label(new Rect(x+27,y+116,590,38),watching?trial.Demonstration.Length+" destellos = "+trial.Answer.Length+" respuestas. Los enemigos entran al responder.":"Entra en los aros con Luma · WASD mover · Q esquivar · R atacar",14,dim);
             if(watching)Label(new Rect(x+647,y+60,190,48),shown+" / "+trial.Demonstration.Length,30,paper,TextAnchor.MiddleCenter,true);
             else if(Button(new Rect(x+633,y+57,211,47),"Volver a escuchar",false,!paused&&!showHelp))Replay();
             if(watching)Label(new Rect(x+647,y+110,190,34),highlighted<0?"PAUSA":"RUNA "+(highlighted+1),21,highlighted<0?dim:NebulaWorld.RuneColors[highlighted],TextAnchor.MiddleCenter);
             if(!watching)
             {
                 bool enabled=!paused&&!showHelp;
-                for(int i=0;i<4;i++)
-                {
-                    Rect r=new Rect(x+28+i*130,y-55,121,42);
-                    Box(new Rect(r.x,r.y-3,r.width,3),NebulaWorld.RuneColors[i]);
-                    if(Button(r,(i+1)+" · "+RuneNames[i],false,enabled))Submit(i);
-                }
+                Box(new Rect(x+28,y-51,570,38),ink);
+                Label(new Rect(x+38,y-48,550,32),occupiedRune>=0?"Sal del círculo exterior antes de volver a elegir esa runa.":"Cada entrada en un aro elige una runa. Planea tu recorrido.",13,mint);
                 if(Button(new Rect(x+633,y+115,211,36),showHint?"Ocultar pista":"Pedir una pista",false,enabled)){showHint=!showHint;if(showHint)assisted=true;}
                 if(showHint)
                 {
@@ -700,7 +695,7 @@ namespace EcosDeNebula
             Label(new Rect(x+35,y+27,690,59),"Todo empieza por escuchar.",39,paper,TextAnchor.UpperLeft,true);
             Label(new Rect(x+36,y+103,680,66),"Cada destello tiene una casilla de respuesta. Introduce el código mientras esquivas y combates. Un código incorrecto o perder toda la vida reinicia el recorrido; conservas nivel, aspectos y memorias.",18,paper);
             RuleLine(x+36,y+194,688);
-            Label(new Rect(x+36,y+220,320,155),"1–4 o clic: activar runas\nWASD: mover a Luma\nR: onda de ataque del bastón\nQ: esquiva con invulnerabilidad\nMayús: correr\nF: revelar siguiente runa",17,dim);
+            Label(new Rect(x+36,y+220,320,155),"Entra en un aro: elegir runa\nSal y vuelve: repetir runa\nWASD: mover · Mayús: correr\nR: onda de ataque del bastón\nQ: esquiva con invulnerabilidad\nF: revelar siguiente runa",17,dim);
             Label(new Rect(x+388,y+220,338,155),"← → o arrastre derecho: cámara\nRueda: acercar o alejar\nEspacio: escuchar de nuevo\nEsc: pausa / cerrar ayuda\nTAB: Atlas y taller\nC: brújula de memorias",17,dim);
             RuleLine(x+36,y+370,688);
             Label(new Rect(x+36,y+393,688,27),"OPENAI GENERATIVA + APRENDIZAJE LOCAL",12,mint);

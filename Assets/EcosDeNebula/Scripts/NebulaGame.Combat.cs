@@ -173,7 +173,7 @@ namespace EcosDeNebula
                 save.best=Mathf.Max(save.best,save.score);save.world=0;save.seals=0;save.score=0;save.completed=false;
                 director.Profile.streak=0;
             }
-            endless=false;walkingToRune=false;dashTime=0;focusTime=0;trial=null;showHint=false;
+            endless=false;occupiedRune=-1;dashTime=0;focusTime=0;trial=null;showHint=false;
             phase=JourneyPhase.Defeat;phaseClock=0;SaveJourney();BuildWorld();
         }
         void RestartFailedRun()

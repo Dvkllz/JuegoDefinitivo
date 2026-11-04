@@ -165,6 +165,8 @@ namespace EcosDeNebula
                 Vector3 p=positions[i];
                 Facet("Pedestal "+(i+1),p,new[]{0.08f,0.32f,0.45f,0.45f},new[]{1.2f,1.2f,0.98f,0f},8,dark);
                 Ring("Sello de runa",p+Vector3.up*0.46f,0.84f,0.06f,Mat(RuneColors[i],1.5f));
+                Ring("Aro de entrada",p+Vector3.up*0.12f,NebulaGame.RuneEntryRadius,0.075f,Mat(RuneColors[i],0.65f));
+                Ring("Límite para repetir",p+Vector3.up*0.11f,NebulaGame.RuneExitRadius,0.025f,Mat(RuneColors[i]*0.55f,0.2f));
                 GameObject crystal=Facet("Cristal "+(i+1),p+Vector3.up*1.35f,new[]{-0.65f,-0.28f,0.48f,1.02f},new[]{0f,0.52f,0.45f,0f},i+4,Mat(RuneColors[i],0.45f));
                 var collider=crystal.AddComponent<SphereCollider>();collider.radius=0.95f;collider.center=Vector3.up*0.2f;
                 crystal.AddComponent<RuneTarget>().Index=i;
