@@ -3,7 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generateChallenge } from './director.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-process.loadEnvFile(path.join(root, '.env.local'));
+const envPath = path.join(root, '.env.local');
+if (fs.existsSync(envPath)) process.loadEnvFile(envPath);
 try {
   const result = await generateChallenge({ world: 0, seal: 0, length: 3,
     profile: { skill: 0.25, trials: 0, streak: 0, seen: [0,0,0,0], missed: [0,0,0,0] } },
