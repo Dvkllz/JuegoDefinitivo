@@ -2,6 +2,14 @@
 
 Última revisión: 4 de noviembre de 2026. Equipo Windows, Unity 6000.6.5f1.
 
+## Mensajes de resultado 4.2.1 — 4 de noviembre
+
+- **Causa identificada:** el aviso se dibujaba después del resultado, en `uiH-238`, sobre el título situado en `uiH-229`.
+- El borde inferior del aviso ahora queda en `uiH-296`, 12 unidades sobre el panel de resultado (`uiH-284`). Su altura se mide con la misma fuente y ancho que se usan al dibujarlo. El cambio cubre campaña y expedición.
+- **Compilación: PASS.** Ejecutable Windows actualizado; log `TestResults/Unity-v421-result-layout.log`.
+- **Unity Play Mode: PASS.** Se repitieron las 17 comprobaciones existentes de interfaz, idiomas y preservación del reto. No se añadieron pruebas de lógica ni se llamó a OpenAI. La separación se revisó en el código; esta verificación no incluye una captura de victoria del ejecutable.
+- Paquete: `Builds/EcosDeNebula-4.2.1-mensajes.zip`.
+
 ## OpenAI real — 4 de noviembre
 
 - **Generación real: PASS.** `Server/live-check.mjs` recibió un patrón de OpenAI usando `gpt-4.1-mini`: «Susurros del Jade», motivo `[1,2,1]` (runas visibles 2 → 3 → 2).

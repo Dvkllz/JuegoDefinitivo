@@ -1,5 +1,11 @@
 # Ecos de Nébula — La era de los guardianes
 
+## 4 de noviembre de 2026 — Mensajes de resultado 4.2.1
+
+- Los avisos de recompensa y logro se colocan sobre el panel de resultado, con 12 unidades de separación, en campaña y expediciones. Ya no ocupan la misma zona que «Un poco más de luz».
+- La altura del aviso se calcula con el texto traducido; durante la respuesta queda por encima de las instrucciones de entrada al cristal. El Atlas oculta estos avisos.
+- Cómo jugar explica Afinidad en español e inglés: estimación local de dominio de patrones de campaña, con valor inicial de 25 %, +7,5 puntos por victoria sin ayuda, +1,5 con ayuda y −12 por código incorrecto. No es un porcentaje de aciertos.
+
 ## 4 de noviembre de 2026 — Edición bilingüe 4.2
 
 - Selector Español / English con preferencia persistente en el menú y la pausa; cambio inmediato sin reiniciar el reto.

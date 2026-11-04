@@ -1,4 +1,4 @@
-param([ValidatePattern('^[a-zA-Z0-9.-]+$')][string]$Version = '4.2-idiomas')
+param([ValidatePattern('^[a-zA-Z0-9.-]+$')][string]$Version = '4.2.1-mensajes')
 $ErrorActionPreference = 'Stop'
 $nebulaRoot = Split-Path -Parent $PSScriptRoot
 $nebulaStage = Join-Path $nebulaRoot "Builds\Package-$Version"
